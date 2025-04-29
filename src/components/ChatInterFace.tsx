@@ -1,5 +1,6 @@
 import React from "react";
 import avatar from "../assets/avatar.jpg";
+import { ChatBubble } from "./ChatBubble";
 
 export const ChatInterFace: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ export const ChatInterFace: React.FC = () => {
           </p>
         </div>
       </div>
+      <ChatBubble />
       <form className="relative w-[304px] h-[42px]">
         <input
           type="text"
