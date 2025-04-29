@@ -8,11 +8,13 @@ export default defineConfig({
   build: {
     target: "esnext",
     outDir: "dist",
-    rollupOptions: {
-      input: {
-        index: "index.html",
-        background: "/background.js" 
-      },
+  },
+  server: {
+    port: 5173,
+    strictPort: true,
+    hmr: {
+      port: 5173,
+      host: "localhost",
     },
   },
 });
