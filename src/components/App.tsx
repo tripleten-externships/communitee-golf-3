@@ -1,16 +1,22 @@
-import React from "react";
-import { LoginForm } from "./LoginForm";
+import React ,  { useState } from "react";
+import Login from "./Login";
 
 export const App: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+const handleLogin = () => {
+  // Logic to set user as logged in after successful authentication, nav to message list
+  setIsLoggedIn(true);
+};
 
   return (
-    <div className="w-96 h-96 bg-white p-4">
+    <div className="mx-auto p-5 bg-white min-w-[320px]">
       {!isLoggedIn ? (
-        <LoginForm onLogin={() => setIsLoggedIn(true)} />
+        <Login onLogin={handleLogin}/>
       ) : (
         <div>Chat interface will go here</div>
       )}
+
     </div>
   );
 };

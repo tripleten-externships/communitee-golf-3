@@ -1,56 +1,97 @@
-import React from "react";
+import React,{useState} from "react";
+import { validateLoginForm } from "../hooks/validateLoginForm";
 
 interface LoginFormProps {
-  onLogin: () => void;
+  onLogin: (username: string, password: string) => void;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [values, setValues] = useState({
+    username: '',
+    password: ''
+  });
+  const [errors, setErrors] = useState<{ username?: string; password?: string }>({});
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setValues(prev => ({ ...prev, [name]: value }));
+    
+    // Real-time validation
+    const { errors: newErrors } = validateLoginForm({ ...values, [name]: value });
+    setErrors(prev => ({ ...prev, [name]: newErrors[name as keyof typeof newErrors] }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement actual login logic
-    onLogin();
+    const validation = validateLoginForm(values);
+    setErrors(validation.errors);
+    
+    if (validation.isValid) {
+      onLogin(values.username, values.password);
+    }
+  };
+
+  const handleForgotPassword = () => {
+    console.log("Forgot password clicked!");
+    // TODO: show a modal or navigate to a password reset page - API call
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
+    <form onSubmit={handleSubmit} className="space-y-5 pb-[217px] flex flex-col pt-4">
+      <div >
         <label
+      
+          className="sr-only"
           htmlFor="username"
-          className="block text-sm font-medium text-gray-700"
         >
           Username
+          
         </label>
         <input
           type="text"
           id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          name="username" 
+          placeholder="Username"
+          value={values.username}
+          onChange={handleChange}
+          className={`w-full rounded-xl border border-solid p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+            errors.username ? 'border-red-500' : 'border-gray-400'
+          }`}
         />
+         {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
       </div>
       <div>
         <label
           htmlFor="password"
-          className="block text-sm font-medium text-gray-700"
+          className="sr-only"
         >
           Password
         </label>
         <input
           type="password"
           id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          name="password"
+          placeholder="Password"
+          value={values.password}
+          onChange={handleChange}
+          className={`w-full rounded-xl border border-solid p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+            errors.password ? 'border-red-500' : 'border-gray-400'
+          }`}
         />
+        {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
       </div>
       <button
         type="submit"
-        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        className=" w-full  py-3 px-4 border border-transparent rounded-md shadow-sm font-poppins font-semibold text-base leading-6 tracking-normal text-white bg-custom-red hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
       >
         Sign in
+      </button>
+      <button
+        type="button"
+        onClick={handleForgotPassword}  
+        className="font-poppins font-medium text-sm leading-6 tracking-normal text-black  block text-center  p-0 hover:text-red-600 "
+      >
+        Forgot Password?
       </button>
     </form>
   );
