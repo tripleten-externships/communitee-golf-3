@@ -1,4 +1,3 @@
-import React ,  { useState ,useEffect} from "react";
 import Header from "./Header/Header";
 import Login from "./Login";
 import { AuthProvider } from "./auth/AuthProvider";
