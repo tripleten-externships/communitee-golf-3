@@ -1,45 +1,58 @@
 import React ,  { useState ,useEffect} from "react";
+import Header from "./Header/Header";
 import Login from "./Login";
-import { getToken,setToken} from "../api/token";
-import { login } from "../api/auth";
+import { AuthProvider } from "./auth/AuthProvider";
+import { useAuth } from "../hooks/useAuth";
 
-export const App: React.FC = () => {
-const [isLoggedIn, setIsLoggedIn] = useState(false);
-const [token, setCurrentToken] = useState(getToken);
-const [logInError, setLogInError] = useState(false);
+export const AppContent: React.FC = () => {
+  const { isLoggedIn, login, logout, } = useAuth();
+
+  const handleExitClick = () => {
+    window.close();
+  };
 
 
-useEffect(() => {
-  
-  if (token) {
-    setIsLoggedIn(true);
-  }
-}, []);
+  //This needs to be in chat component
+/*
+  interface ChatMessage {
+    sender: string;
+    content: string | number;  // This allows both strings and numbers
+}
 
-const onLogin =  (token: string) => {
-  try{  if (token) {
-      setLogInError(false);
-      setToken(token); // Store token in localStorage
-      setCurrentToken(token); // Update state with the current token
-      setIsLoggedIn(true); // Set the login state to true
-    } else {
-      throw new Error("Login failed: No token received");
-    }}
-    catch (error) {
-      console.error(error);  // Log the error
-      setLogInError(true);  // Set error state to indicate a login failure
+  const handleNewMessage = (message: ChatMessage) => {
+    //When a new message arrives and popup is closed
+    if (document.hidden) {
+      //Send message to background script
+      chrome.runtime.sendMessage({
+        type: 'NEW_MESSAGE',
+        payload: {
+          sender: message.sender,
+          content: message.content
+        }
+      });
     }
-
-};
-    
+  }
+    */
+  
   return (
-    <div className="mx-auto p-5 bg-white min-w-[320px]">
-      {!isLoggedIn ? (
-        <Login onLogin={onLogin}/>
+    <div className="w-96 h-96 bg-white p-4">
+        <Header
+        handleExitClick={handleExitClick}
+        handleSignoutClick={ logout }
+        isLoggedIn={isLoggedIn}
+      />
+     {!isLoggedIn ? (
+        <Login onLogin={login}/>
       ) : (
         <div>Chat interface will go here</div>
       )}
-
     </div>
+  );
+};
+export const App: React.FC = () => {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 };
