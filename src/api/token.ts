@@ -5,6 +5,13 @@ interface TokenData {
   expiresAt: number;
 }
 
+export function formatBearerToken(token: string | null): string {
+  if (token === null){
+    return token = '';
+  }
+  return `Bearer ${token}`;
+}
+
 export const setToken = (token: string, expirationHours: number = 24): void => {
   const expiresAt = Date.now() + (expirationHours * 60 * 60 * 1000);
   const tokenData: TokenData = {
@@ -32,6 +39,21 @@ export const getToken = (): string | null => {
     return null
   }
 };
+
+export const isTokenValid = (): boolean => {
+  const tokenData = localStorage.getItem(TOKEN_KEY);
+  if (!tokenData) {
+    return false;
+  }
+ 
+  try {
+    const token = JSON.parse(tokenData);
+    return token.expiresAt > Date.now();
+  }
+  catch(error) {
+    return false;
+  }
+}
 
 export const removeToken = (): void => {
   localStorage.removeItem(TOKEN_KEY);
