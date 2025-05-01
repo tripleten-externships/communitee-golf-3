@@ -1,6 +1,6 @@
 export interface AuthContextType {
     isLoggedIn: boolean;
-    login: () => void;
+    onLogin: (token:string | null) => void;
     logout: () => void;
     logInError: boolean; 
     setLogInError: React.Dispatch<React.SetStateAction<boolean>>; 

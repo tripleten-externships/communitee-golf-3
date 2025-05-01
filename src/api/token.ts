@@ -6,10 +6,7 @@ interface TokenData {
 }
 
 export function formatBearerToken(token: string | null): string {
-  if (token === null){
-    return token = '';
-  }
-  return `Bearer ${token}`;
+  return token ? `Bearer ${token}` : '';
 }
 
 export const setToken = (token: string, expirationHours: number = 24): void => {
@@ -26,33 +23,23 @@ export const getToken = (): string | null => {
   if (!tokenData) return null;
 
   try {
-    const { token, expiresAt } = JSON.parse(tokenData) as TokenData;
+    const { token, expiresAt }= JSON.parse(tokenData) as TokenData;
 
     if (Date.now() > expiresAt) {
-      localStorage.removeItem(TOKEN_KEY); //clear expired token
+      removeToken();//clear expired token
       return null;
     }
     return token;
   }
   catch(error) {
-    localStorage.removeItem(TOKEN_KEY);
+    removeToken(); // Remove invalid token data
     return null
   }
 };
 
 export const isTokenValid = (): boolean => {
-  const tokenData = localStorage.getItem(TOKEN_KEY);
-  if (!tokenData) {
-    return false;
-  }
- 
-  try {
-    const token = JSON.parse(tokenData);
-    return token.expiresAt > Date.now();
-  }
-  catch(error) {
-    return false;
-  }
+  
+  return getToken() !== null;
 }
 
 export const removeToken = (): void => {
