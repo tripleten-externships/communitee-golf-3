@@ -4,7 +4,7 @@ import { ChatStream } from "./ChatStream";
 
 export const ChatInterFace: React.FC = () => {
   return (
-    <div className="m-4">
+    <>
       <div className="relative">
         <button
           className="bg-[url(./assets/back-btn.svg)] bg-transparent bg-no-repeat bg-center
@@ -18,7 +18,7 @@ export const ChatInterFace: React.FC = () => {
         </div>
       </div>
       <ChatStream />
-      <form className="relative w-[304px] h-[42px]">
+      <form className="relative w-full h-[42px]">
         <input
           type="text"
           placeholder="Write a message..."
@@ -30,6 +30,6 @@ export const ChatInterFace: React.FC = () => {
            w-6 h-6 border-none absolute top-2 right-3"
         ></button>
       </form>
-    </div>
+    </>
   );
 };
