@@ -3,14 +3,9 @@ import React from "react";
 type ChatBubbleProps = {
   isMine?: boolean;
   message: string;
-  sentAt: string;
 };
 
-export const ChatBubble: React.FC<ChatBubbleProps> = ({
-  isMine,
-  message,
-  sentAt,
-}) => {
+export const ChatBubble: React.FC<ChatBubbleProps> = ({ isMine, message }) => {
   return (
     <div className="flex flex-col">
       <div

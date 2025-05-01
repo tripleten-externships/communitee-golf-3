@@ -18,18 +18,6 @@ export const ChatInterFace: React.FC = () => {
         </div>
       </div>
       <ChatStream />
-      <form className="relative w-full h-[42px]">
-        <input
-          type="text"
-          placeholder="Write a message..."
-          className="border border-gray-300 p-3 rounded-[12px] w-full
-          font-normal text-base leading-[110%]"
-        />
-        <button
-          className="bg-[url(./assets/subtract-btn.svg)] bg-transparent bg-no-repeat bg-center
-           w-6 h-6 border-none absolute top-2 right-3"
-        ></button>
-      </form>
     </>
   );
 };
