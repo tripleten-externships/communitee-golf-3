@@ -1,35 +1,41 @@
+import { useState ,useCallback} from "react";
+
+
+const initializeFields = (fields: string[]): Record<string, string> => 
+  fields.reduce((acc, fieldName) => {
+    acc[fieldName] = ''; 
+    return acc;
+  }, {} as Record<string, string>);
+
+
+const initialFieldState = initializeFields(['username', 'password']);
 type ValidationResult = {
     isValid: boolean;
-    errors: {
-      username?: string;
-      password?: string;
-    };
+    errors: Record<string, string>;
+    values: Record<string, string>;
+    handleValueChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    resetForm:()=>void
+    
   };
   
-  export const validateLoginForm = (values: { username: string; password: string }): ValidationResult => {
-    const errors: ValidationResult['errors'] = {};
-    let isValid = true;
+  export const validateLoginForm = (): ValidationResult => {
   
-    // Username validation
-    if (!values.username.trim()) {
-      errors.username = 'Username is required';
-      isValid = false;
-    } else if (values.username.length < 3) {
-      errors.username = 'Minimum 3 characters';
-      isValid = false;
-    } else if (!/^[a-z0-9_]+$/i.test(values.username)) {
-      errors.username = 'Only letters, numbers, and _';
-      isValid = false;
-    }
-  
-    // Password validation
-    if (!values.password) {
-      errors.password = 'Password is required';
-      isValid = false;
-    } else if (values.password.length < 8) {
-      errors.password = 'Minimum 8 characters';
-      isValid = false;
-    }
-  
-    return { isValid, errors };
+    const [values, setValues] = useState(initialFieldState);
+  const [ errors, setErrors ] = useState(initialFieldState);
+    const [ isValid, setIsValid ] = useState<boolean>(false);
+
+    const handleValueChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
+      const {name, value} = e.target
+      setValues({...values, [ name]: value });
+      setErrors({...errors, [ name]: e.target.validationMessage});
+      setIsValid(e.target.closest('form')?.checkValidity() ?? false);
+
+      
+  }
+    const resetForm = useCallback(() => {
+      setValues({username:'',password:''});
+      setErrors({});
+      setIsValid(false);
+    }, [setValues, setErrors, setIsValid]);
+    return {values, handleValueChange, errors, isValid, resetForm };
   };

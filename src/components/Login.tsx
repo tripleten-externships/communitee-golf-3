@@ -8,8 +8,9 @@ interface LoginProps {
   }
 
 const Login : React.FC<LoginProps> =()=> {
-    const {onLogin}=useAuth();
+    const {onLogin,setIsSubmitted}=useAuth();
     const handleLogin = async (username: string, password: string) => {
+        setIsSubmitted(true); 
         try {
             const token = await login({ username, password }); 
             onLogin(token);

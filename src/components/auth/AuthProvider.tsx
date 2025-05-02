@@ -10,6 +10,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [logInError, setLogInError] = useState(false); // Managing login error state here
 const [token,setCurrentToken]=useState(getToken);
 const navigate = useNavigate();
+const [isSubmitted,setIsSubmitted]=useState(false);
 
   const onLogin =  (token: string | null) => {
     try{  if (token) {
@@ -18,7 +19,7 @@ const navigate = useNavigate();
         setCurrentToken(token); // Update state with the current token
         setIsLoggedIn(true); // Set the login state to true
         // TODO: redirect to message list 
-        navigate("/messages");  
+        // navigate("/messages");  
       } else {
         removeToken();
         throw new Error("Login failed: No token received");
@@ -27,6 +28,9 @@ const navigate = useNavigate();
         removeToken();
         console.error(error);  // Log the error
         setLogInError(true);  // Set error state to indicate a login failure
+      } finally {
+        // Reset isSubmitted to false after the login attempt (whether successful or failed)
+        setIsSubmitted(false);
       }
   
   };
@@ -43,7 +47,7 @@ const navigate = useNavigate();
     onLogin,
     logout,
     logInError,
-    setLogInError, setCurrentToken,setIsLoggedIn,token
+    setLogInError, setCurrentToken,setIsLoggedIn,token,isSubmitted,setIsSubmitted
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
