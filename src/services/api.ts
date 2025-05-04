@@ -30,7 +30,7 @@ export const getSingleMsgStream = (streanId: string, token: string) => {
 
 export const updateSingleMsgStream = (streanId: string, token: string) => {
   return request(`${baseUrl}/message-stream/:${streanId}`, {
-    method: "PUT",
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
       authorization: `Bearer ${token}`,
