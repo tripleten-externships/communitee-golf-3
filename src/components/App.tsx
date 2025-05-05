@@ -45,7 +45,21 @@ export const AppContent: React.FC = () => {
         <Routes>
           <Route path="/login" element={<Login />}></Route>
           {/* TODO: route to message list of different locations and route to chat bubble */}
-    {/* <Route path="/messages" element=""><ProtectedRoute><></></ProtectedRoute></Route> */}
+
+{/* 
+    <Route path="/messages" element={
+          <ProtectedRoute>
+            <MessageList />  
+          </ProtectedRoute>
+        } />
+       
+        <Route path="/messages/:locationId" element={
+          <ProtectedRoute>
+            <MessageListByLocation />  
+          </ProtectedRoute>
+        } />
+    
+        <Route path="/" element={<ChatBubble />} /> */}
       </Routes>
     </div>
   );

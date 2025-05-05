@@ -11,6 +11,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 const [token,setCurrentToken]=useState(getToken);
 const navigate = useNavigate();
 const [isSubmitted,setIsSubmitted]=useState(false);
+const [isLoading, setIsLoading] = useState(false);
 
   const onLogin =  (token: string | null) => {
     try{  if (token) {
@@ -30,6 +31,7 @@ const [isSubmitted,setIsSubmitted]=useState(false);
         setLogInError(true);  // Set error state to indicate a login failure
       } finally {
         // Reset isSubmitted to false after the login attempt (whether successful or failed)
+        setIsLoading(false);
         setIsSubmitted(false);
       }
   
@@ -47,7 +49,7 @@ const [isSubmitted,setIsSubmitted]=useState(false);
     onLogin,
     logout,
     logInError,
-    setLogInError, setCurrentToken,setIsLoggedIn,token,isSubmitted,setIsSubmitted
+    setLogInError, setCurrentToken,setIsLoggedIn,token,isSubmitted,setIsSubmitted,isLoading, setIsLoading
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -8,15 +8,13 @@ interface LoginFormProps {
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
-  const {isSubmitted}=useAuth();
+  const {isSubmitted,isLoading}=useAuth();
   const {values, handleValueChange, errors, isValid, resetForm}=validateLoginForm();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(isValid)
-    if (isValid) {
-      onLogin(values.username, values.password);
-    } else {console.error('Invalid Inputs')}
+    onLogin(values.username, values.password);
+    
   };
 
   const handleForgotPassword = () => {
@@ -49,6 +47,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             errors.username ? 'border-red-500' : 'border-gray-400'
           }`}
           required
+          disabled={isLoading}
         />
          {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
      
@@ -72,6 +71,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             errors.password ? 'border-red-500' : 'border-gray-400'
           }`}
           required
+          disabled={isLoading}
         />
         {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
       </div>
@@ -81,7 +81,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
           ${!isValid ? 'cursor-not-allowed focus:ring-none hover: bg-custom-red ' : 'hover:bg-red-600 focus:ring-blue-500'}`}
      disabled={!isValid}
      >
-       {isValid&&isSubmitted ? "Submitting..." : "Sign in"}
+       {isSubmitted ? "Submitting..." : "Sign in"}
       </button>
       <button
         type="button"
