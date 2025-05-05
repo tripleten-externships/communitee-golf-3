@@ -18,8 +18,8 @@ export const getAllMsgStream = (token: string) => {
   });
 };
 
-export const getSingleMsgStream = (streanId: string, token: string) => {
-  return request(`${baseUrl}/message-stream/:${streanId}`, {
+export const getSingleMsgStream = (streamId: string, token: string) => {
+  return request(`${baseUrl}/message-stream/${streamId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -28,12 +28,19 @@ export const getSingleMsgStream = (streanId: string, token: string) => {
   });
 };
 
-export const updateSingleMsgStream = (streanId: string, token: string) => {
-  return request(`${baseUrl}/message-stream/:${streanId}`, {
+export const updateSingleMsgStream = (
+  content: string,
+  streamId: string,
+  token: string
+) => {
+  return request(`${baseUrl}/message/${streamId}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       authorization: `Bearer ${token}`,
     },
+    body: JSON.stringify({
+      content,
+    }),
   });
 };

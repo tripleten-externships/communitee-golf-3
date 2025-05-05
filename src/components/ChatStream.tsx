@@ -1,17 +1,21 @@
 import React from "react";
 import { ChatBubble } from "./ChatBubble";
 import { ChatInput } from "./ChatInput";
-import { mockMsg } from "../services/mockMsg";
+import { token } from "../services/constant";
+import { getSingleMsgStream, updateSingleMsgStream } from "../services/api";
 
 type Message = {
-  //   id: string;
+  id: string;
   senderId: string;
-  text: string;
+  content: string;
   sentAt: string;
 };
 
-const user = "user_1";
+//TODO: replace with real data
+const user = "user-123";
+const client = "1";
 
+//Only display time at a gap of at least 30 mins
 function displayTime(current: Message, prev?: Message) {
   if (!prev) return true;
   const defaultGap = 30 * 60 * 1000;
@@ -22,30 +26,46 @@ function displayTime(current: Message, prev?: Message) {
   return timeGap > defaultGap;
 }
 
+//Calculate the displayed time in "Just Now", "?min", "?h", ?d"
 function getRelativeTime(sentAt: string) {
   const now = new Date();
   const timeSent = new Date(sentAt);
 
   const minDiff = Math.floor((now.getTime() - timeSent.getTime()) / 60000);
+  const hours = Math.floor(minDiff / 60);
+  const days = Math.floor(hours / 24);
 
   if (minDiff < 1) return "Just now";
   if (minDiff < 60) return `${minDiff}min`;
+  if (minDiff >= 60 && minDiff < 24 * 60) return `${hours}h`;
 
-  const hours = Math.floor(minDiff / 60);
-  return `${hours}h`;
+  return `${days}d`;
 }
 
+//ChatStream Compenent
 export const ChatStream: React.FC = () => {
-  const [messages, setMessages] = React.useState(mockMsg);
+  const [messages, setMessages] = React.useState<Message[]>([]);
 
+  React.useEffect(() => {
+    getSingleMsgStream(client, token)
+      .then((res) => {
+        setMessages(res.messages);
+      })
+      .catch(() => console.error);
+  }, []);
+
+  //handle user sending message
   function handleSendMessage(message: string) {
     const newMessage = {
-      text: message,
+      id: `${Date.now()}`,
+      content: message,
       sentAt: new Date().toISOString(),
-      senderId: user,
+      senderId: "user-123",
     };
 
     setMessages([...messages, newMessage]);
+
+    updateSingleMsgStream(newMessage.content, client, token);
   }
 
   return (
@@ -57,7 +77,7 @@ export const ChatStream: React.FC = () => {
         const isMine = msg.senderId === user;
 
         return (
-          <React.Fragment key={i}>
+          <React.Fragment key={msg.id}>
             {isDisplayed && (
               <span
                 className={`text-gray-400 text-[10px] leading-[130%] tracking-[0] align-middle 
@@ -66,7 +86,7 @@ export const ChatStream: React.FC = () => {
                 {timeDisplayed}
               </span>
             )}
-            <ChatBubble message={msg.text} isMine={isMine} />
+            <ChatBubble message={msg.content} isMine={isMine} />
           </React.Fragment>
         );
       })}
