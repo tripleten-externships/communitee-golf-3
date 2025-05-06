@@ -3,7 +3,7 @@ import { useAuth } from "../hooks/useAuth";
 import { Routes, Route } from "react-router-dom";
 import Header from "./Header/Header";
 import Login from "./Login";
-import ProtectedRoute from "./ProtectedRoute.tsx"
+// import ProtectedRoute from "./ProtectedRoute.tsx"
 
 export const AppContent: React.FC = () => {
   const { isLoggedIn, logout } = useAuth();
