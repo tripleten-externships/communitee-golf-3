@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import Login  from "./Login"; 
+import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./auth/AuthProvider";
 
 const meta = {
   title: "Pages/Login",
@@ -14,14 +16,37 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+// Create a Wrapper to provide both BrowserRouter and AuthProvider context
+const Wrapper = (args: any) => (
+  <BrowserRouter>
+    <AuthProvider> {/* Wrap both BrowserRouter and AuthProvider */}
+      <Login {...args} />
+    </AuthProvider>
+  </BrowserRouter>
+);
+
 export const Default: Story = {
-  args: {     onLogin: () => console.log("Logged in")
+  render: (args) => {
+    console.log("Rendering Default Story");
+    return <Wrapper {...args} />; 
+  },
+  args: {     
+    onLogin: () => {
+      console.log("Logged in");
+    }
   },
 };
 
 // Mobile view
 export const MobileView: Story = {
-  args: {    onLogin: () => console.log("Logged in")
+  render: (args) => {
+    console.log("Rendering MobileView Story");
+    return <Wrapper {...args} />; 
+  },
+  args: {    
+    onLogin: () => {
+      console.log("Logged in (Mobile View)");
+    }
   },
   parameters: {
     viewport: {

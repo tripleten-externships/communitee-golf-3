@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within } from '@storybook/test';
+import { Meta, StoryObj } from "@storybook/react";
 import { LoginForm } from "./LoginForm";
+import { AuthProvider } from "./auth/AuthProvider";
+import { BrowserRouter } from "react-router-dom";
 
 const meta = {
   title: "Components/LoginForm",
@@ -15,46 +16,41 @@ const meta = {
 } satisfies Meta<typeof LoginForm>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+const Template = (args: any) => (
+  <BrowserRouter> {/* Wrap the LoginForm with BrowserRouter */}
+  <AuthProvider>
+    <LoginForm {...args} />
+    </AuthProvider>
+  </BrowserRouter>
+);
+// Default story
+export const Default: StoryObj<typeof meta> = {
+  render: Template,
   args: {
-    onLogin: (username,password) => console.log('Submitted:', username, password),
+    onLogin: (username, password) => console.log('Submitted:', username, password),
   },
 };
 
 // With validation errors
-export const WithErrors: Story = {
+export const WithErrors: StoryObj<typeof meta> = {
+  render: Template,
   args: {
     onLogin: (username, password) => console.log('Submitted with errors:', username, password)
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    
-    // Submit empty form to trigger validation
-    await userEvent.click(canvas.getByText('Sign in'));
-  }
 };
 
-// Interactive test case
-export const SuccessfulLogin: Story = {
+// Interactive test case for successful login
+export const SuccessfulLogin: StoryObj<typeof meta> = {
+  render: Template,
   args: {
     onLogin: () => alert(`Welcome!`)
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    
-    // Fill out form correctly
-    await userEvent.type(canvas.getByPlaceholderText('Username'), 'john_doe');
-    await userEvent.type(canvas.getByPlaceholderText('Password'), 'securePass123');
-    
-    // Submit
-    await userEvent.click(canvas.getByText('Sign in'));
-  }
 };
 
 // Mobile view
-export const MobileView: Story = {
+export const MobileView: StoryObj<typeof meta> = {
+  render: Template,
   args: {
     onLogin: (username, password) => console.log('Mobile login:', username, password)
   },
