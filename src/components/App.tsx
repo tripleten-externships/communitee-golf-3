@@ -1,6 +1,5 @@
 import React from "react";
 import { LoginForm } from "./LoginForm";
-import { MessageSummaryList } from "./MessageSummaryList";
 
 export const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
