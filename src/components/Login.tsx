@@ -26,7 +26,7 @@ try {
       
   return (
     <div className="flex items-center justify-center ">
-      <div className=" bg-white w-full flex flex-col items-center justify-center rounded-lg pt-[117px] pb-[217px]">
+      <div className=" bg-white w-full flex flex-col items-center justify-center rounded-lg pt-[117px] pb-[195px]">
         <LoginForm onLogin={handleLogin} />
       </div>
     </div>      

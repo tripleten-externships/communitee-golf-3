@@ -1,6 +1,6 @@
 import { AuthProvider } from "./auth/AuthProvider";
 import { useAuth } from "../hooks/useAuth";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Header from "./Header/Header";
 import Login from "./Login";
 // import ProtectedRoute from "./ProtectedRoute.tsx"
@@ -36,14 +36,17 @@ export const AppContent: React.FC = () => {
     */
   
   return (
-    <div className="w-96  min-w-[320px] bg-white p-4  max-h-[595px] overflow-hidden fixed top-0 right-0 z-50 ">
+    <div className="w-[336px] h-[595px] bg-white border-black rounded-xl shadow-xl content-between">
         <Header
         handleExitClick={handleExitClick}
         handleSignoutClick={ logout }
         isLoggedIn={isLoggedIn}
       />
         <Routes>
-          <Route path="/login" element={<Login />}></Route>
+
+          <Route path="/" element={<Login />}></Route>
+          <Route path="*" element={<Navigate to="/" />} />
+
           {/* TODO: route to message list of different locations and route to chat bubble */}
 
 {/* 
