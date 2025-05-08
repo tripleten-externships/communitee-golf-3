@@ -26,7 +26,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     }
   }, [isSubmitted]);
   return (
-    <form onSubmit={handleSubmit} className="space-y-5   flex flex-col ">
+    <form onSubmit={handleSubmit} className="space-y-5   flex flex-col w-full">
       <div >
         <label
       

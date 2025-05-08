@@ -36,12 +36,13 @@ export const AppContent: React.FC = () => {
     */
   
   return (
-    <div className="w-96  min-w-[320px] bg-white p-4  max-h-[595px] overflow-hidden fixed top-0 right-0 z-50 ">
+    <div className="w-[336px] flex-col  flex items-center justify-center  bg-white p-4 z-50 m-0">
         <Header
         handleExitClick={handleExitClick}
         handleSignoutClick={ logout }
         isLoggedIn={isLoggedIn}
       />
+      <Login/>
         <Routes>
           <Route path="/login" element={<Login />}></Route>
           {/* TODO: route to message list of different locations and route to chat bubble */}
