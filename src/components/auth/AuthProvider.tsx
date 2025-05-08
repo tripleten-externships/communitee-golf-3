@@ -41,7 +41,7 @@ const [isLoading, setIsLoading] = useState(false);
     removeToken();
     setIsLoggedIn(false);
     setLogInError(false); // Reset error on logout
-    navigate("/login")
+    navigate("/")
   };
 
   const value: AuthContextType = {
