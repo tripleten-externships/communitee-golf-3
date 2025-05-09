@@ -8,20 +8,28 @@ interface LoginProps {
   }
 
 const Login : React.FC<LoginProps> =()=> {
-    const {onLogin,setIsSubmitted,setIsLoading}=useAuth();
+    const {onLogin,setIsSubmitted,setIsLoading,setLogInError,setLogInErrorMessage,isLoading}=useAuth();
     const handleLogin = async (username: string, password: string) => {
       setIsLoading(true);  // Start loading before making the API call
     setIsSubmitted(true); // Set submitted state to true to prevent multiple submissions
 try {
             const token = await login({ username, password }); 
-            onLogin(token);
-        } catch (error) {
-          console.error("Login failed");
+            onLogin(token);     
+        } catch (error:any) {
+          if (error.message==="Invalid credentials." ){
+            setLogInError(true);
+            setLogInErrorMessage("Invalid credentials")
+          }
+          if ( error.message==="Username and password are required."){
+            setLogInError(true);
+            setLogInErrorMessage("Username and password are required")
+          }
         }
         finally {
           setIsLoading(false);  
           setIsSubmitted(false);  // Reset submission state after completion (whether success or error)
         }
+        
       };
       
   return (

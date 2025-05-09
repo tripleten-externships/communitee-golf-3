@@ -38,6 +38,9 @@ export const AppContent: React.FC = () => {
     return <div>You are logged in and viewing the message list!</div>;
   };
   
+  const ForgetPasswordPlaceholder=()=>{
+    return  <div>forget password</div>
+  }
   return (
     <div className="w-[336px] h-[595px] bg-white border-[rgba(222,222,222,0.3)] rounded-xl shadow-xl shadow-red-100 content-between">
         <Header
@@ -50,7 +53,7 @@ export const AppContent: React.FC = () => {
 
           <Route path="/" element={<Login />}></Route>
           <Route path="*" element={<Navigate to="/" />} />
-
+          <Route path="/forget-password" element={<ForgetPasswordPlaceholder />}></Route>
           {/* TODO: route to message list of different locations and route to chat bubble */}
           <Route path="/messages" element={
           <ProtectedRoute>

@@ -8,7 +8,7 @@ interface LoginFormProps {
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
-  const {isSubmitted,isLoading}=useAuth();
+  const {isSubmitted,isLoading,logInError,logInErrorMessage,handleForgotPassword}=useAuth();
   const {values, handleValueChange, errors, isValid, resetForm}=validateLoginForm();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -17,8 +17,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     
   };
 
-  const handleForgotPassword = () => {
-    // TODO: show a modal or navigate to a password reset page - API call
+  const onForgotPassword = () => {
+    handleForgotPassword();
   };
   useEffect(() => {
     if (!isSubmitted) {
@@ -44,13 +44,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
           value={values.username}
           onChange={handleValueChange}
           className={`w-full rounded-xl border border-solid p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            errors.username ? 'border-red-500' : 'border-gray-400'
+            (errors.username || logInError)? 'border-red-500' : 'border-gray-400'
           }`}
           required
-          disabled={isLoading}
+         
         />
          {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
-     
+         {logInError && (!errors.username )&& <p className="text-red-500 text-sm">{logInErrorMessage}</p>}
      
       </div>
       <div>
@@ -68,12 +68,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
           value={values.password}
           onChange={handleValueChange}
           className={`w-full rounded-xl border border-solid p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            errors.password ? 'border-red-500' : 'border-gray-400'
+            (errors.password || logInError)? 'border-red-500' : 'border-gray-400'
           }`}
           required
-          disabled={isLoading}
+          
         />
         {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+        {logInError && (!errors.password)&& <p className="text-red-500 text-sm">{logInErrorMessage}</p>}
       </div>
       <button
         type="submit"
@@ -81,11 +82,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
           ${!isValid ? 'cursor-not-allowed focus:ring-none hover: bg-custom-red ' : 'hover:bg-red-600 focus:ring-blue-500'}`}
      disabled={!isValid}
      >
-       {isSubmitted ? "Submitting..." : "Sign in"}
+      {isLoading ? "Loading..." : "Sign In"}
       </button>
       <button
         type="button"
-        onClick={handleForgotPassword}  
+        onClick={onForgotPassword}  
         className="font-poppins font-medium text-sm leading-6 tracking-normal text-black  block text-center  p-0 hover:text-red-600 "
       >
         Forgot Password? 

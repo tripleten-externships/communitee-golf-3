@@ -6,9 +6,12 @@ export interface AuthContextType {
     onLogin: (token:string | null) => void;
     logout: () => void;
     logInError: boolean; 
-    setIsLoading:React.Dispatch<React.SetStateAction<boolean>>;
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
     setLogInError: React.Dispatch<React.SetStateAction<boolean>>; 
     setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>; 
     setCurrentToken: React.Dispatch<React.SetStateAction<string | null>>
-    token:string | null
+    token:string | null;
+    logInErrorMessage:string | null;
+    setLogInErrorMessage: React.Dispatch<React.SetStateAction<string>>;
+    handleForgotPassword:()=>void
   }

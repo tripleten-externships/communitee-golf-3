@@ -12,14 +12,15 @@ const [token,setCurrentToken]=useState(getToken);
 const navigate = useNavigate();
 const [isSubmitted,setIsSubmitted]=useState(false);
 const [isLoading, setIsLoading] = useState(false);
+const [logInErrorMessage,setLogInErrorMessage]=useState("");
 
   const onLogin =  (token: string | null) => {
     try{  if (token) {
         setLogInError(false);
+        setLogInErrorMessage("");
         setToken(token); // Store token in localStorage
         setCurrentToken(token); // Update state with the current token
         setIsLoggedIn(true); // Set the login state to true
-        // TODO: redirect to message list 
         navigate("/messages");  
       } else {
         removeToken();
@@ -27,8 +28,7 @@ const [isLoading, setIsLoading] = useState(false);
       }}
       catch (error) {
         removeToken();
-        console.error(error);  // Log the error
-        setLogInError(true);  // Set error state to indicate a login failure
+        console.error();  // Log the error
       } finally {
         // Reset isSubmitted to false after the login attempt (whether successful or failed)
         setIsLoading(false);
@@ -44,12 +44,16 @@ const [isLoading, setIsLoading] = useState(false);
     navigate("/")
   };
 
+
+  const handleForgotPassword=()=>{
+    navigate("/forget-password")
+  }
   const value: AuthContextType = {
     isLoggedIn,
     onLogin,
     logout,
-    logInError,
-    setLogInError, setCurrentToken,setIsLoggedIn,token,isSubmitted,setIsSubmitted,isLoading, setIsLoading
+    logInError,handleForgotPassword,
+    setLogInError, setCurrentToken,setIsLoggedIn,token,isSubmitted,setIsSubmitted,isLoading, setIsLoading,logInErrorMessage,setLogInErrorMessage,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
