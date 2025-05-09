@@ -8,7 +8,7 @@ interface LoginProps {
   }
 
 const Login : React.FC<LoginProps> =()=> {
-    const {onLogin,setIsSubmitted,setIsLoading,setLogInError,setLogInErrorMessage,isLoading}=useAuth();
+    const {onLogin,setIsSubmitted,setIsLoading,setLogInError,setLogInErrorMessage}=useAuth();
     const handleLogin = async (username: string, password: string) => {
       setIsLoading(true);  // Start loading before making the API call
     setIsSubmitted(true); // Set submitted state to true to prevent multiple submissions
