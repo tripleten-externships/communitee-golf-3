@@ -78,8 +78,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       </div>
       <button
         type="submit"
-        className={`w-full py-3 px-4 border border-transparent rounded-md shadow-sm font-poppins font-semibold text-base leading-6 tracking-normal text-white bg-custom-red 
-          ${!isValid ? 'cursor-not-allowed focus:ring-none hover: bg-custom-red ' : 'hover:bg-red-600 focus:ring-blue-500'}`}
+        className={`w-full py-3 px-4 border border-transparent rounded-md shadow-sm font-poppins font-semibold text-base leading-6 tracking-normal text-white bg-custom-red cursor-pointer
+          ${!isValid ? 'bg-custom-red hover:bg-gray-400 focus:ring-none' : 
+      'bg-custom-red hover:bg-red-600 focus:ring-blue-500'}`}
      disabled={!isValid}
      >
       {isLoading ? "Loading..." : "Sign In"}

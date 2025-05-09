@@ -13,5 +13,6 @@ export interface AuthContextType {
     token:string | null;
     logInErrorMessage:string | null;
     setLogInErrorMessage: React.Dispatch<React.SetStateAction<string>>;
-    handleForgotPassword:()=>void
+    handleForgotPassword:()=>void;
+    handleLogoClick:()=>void
   }

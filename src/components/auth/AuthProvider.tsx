@@ -44,6 +44,11 @@ const [logInErrorMessage,setLogInErrorMessage]=useState("");
     navigate("/")
   };
 
+  const handleLogoClick = () => {
+    navigate("/messages"); // Navigate to message list
+    setLogInError(false);
+    setLogInErrorMessage("");
+  };
 
   const handleForgotPassword=()=>{
     navigate("/forget-password")
@@ -53,7 +58,7 @@ const [logInErrorMessage,setLogInErrorMessage]=useState("");
     onLogin,
     logout,
     logInError,handleForgotPassword,
-    setLogInError, setCurrentToken,setIsLoggedIn,token,isSubmitted,setIsSubmitted,isLoading, setIsLoading,logInErrorMessage,setLogInErrorMessage,
+    setLogInError, setCurrentToken,setIsLoggedIn,token,isSubmitted,setIsSubmitted,isLoading, setIsLoading,logInErrorMessage,setLogInErrorMessage,handleLogoClick
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

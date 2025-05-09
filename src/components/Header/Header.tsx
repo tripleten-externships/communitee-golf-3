@@ -1,14 +1,15 @@
 import logo from "../../assets/communitee-logo.png";
 import exit from "../../assets/exit.png";
 import signout from "../../assets/sign-out.png";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+
 
 
 interface HeaderProps {
   handleExitClick: () => void;
   handleSignoutClick: () => void;
   isLoggedIn: boolean;
-  
+
 
 }
 
@@ -17,10 +18,7 @@ function Header({
   handleSignoutClick,
   isLoggedIn,
 }: HeaderProps) {
-  const navigate = useNavigate();
-  const handleLogoClick = () => {
-    navigate("/messages"); // Navigate to message list
-  };
+  const {handleLogoClick}=useAuth();
   return (
     <header className="w-[336px] flex space-x-[48px] my-5 mx-5">
       <button
@@ -33,7 +31,7 @@ function Header({
       >
         <img
           src={signout}
-          alt=""
+          alt="Sign Out"
           className={`${isLoggedIn ? "visible" : "invisible"}`}
         />
       </button>

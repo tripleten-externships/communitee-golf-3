@@ -51,7 +51,7 @@ export const AppContent: React.FC = () => {
     
         <Routes>
 
-          <Route path="/" element={<Login />}></Route>
+        <Route path="/" element={isLoggedIn ? <MessageListPlaceholder /> : <Login />} />
           <Route path="*" element={<Navigate to="/" />} />
           <Route path="/forget-password" element={<ForgetPasswordPlaceholder />}></Route>
           {/* TODO: route to message list of different locations and route to chat bubble */}
