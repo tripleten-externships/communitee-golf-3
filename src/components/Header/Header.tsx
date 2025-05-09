@@ -19,7 +19,7 @@ function Header({
 }: HeaderProps) {
   const navigate = useNavigate();
   const handleLogoClick = () => {
-    navigate("/login"); // Navigate to login page
+    navigate("/messages"); // Navigate to message list
   };
   return (
     <header className="w-[336px] flex space-x-[48px] my-5 mx-5">
