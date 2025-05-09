@@ -20,7 +20,7 @@ const [isLoading, setIsLoading] = useState(false);
         setCurrentToken(token); // Update state with the current token
         setIsLoggedIn(true); // Set the login state to true
         // TODO: redirect to message list 
-        // navigate("/messages");  
+        navigate("/messages");  
       } else {
         removeToken();
         throw new Error("Login failed: No token received");

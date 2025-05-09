@@ -3,7 +3,7 @@ import { useAuth } from "../hooks/useAuth";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Header from "./Header/Header";
 import Login from "./Login";
-// import ProtectedRoute from "./ProtectedRoute.tsx"
+import ProtectedRoute from "./ProtectedRoute.tsx"
 
 export const AppContent: React.FC = () => {
   const { isLoggedIn, logout } = useAuth();
@@ -34,6 +34,9 @@ export const AppContent: React.FC = () => {
     }
   }
     */
+  const MessageListPlaceholder = () => {
+    return <div>You are logged in and viewing the message list!</div>;
+  };
   
   return (
     <div className="w-[336px] h-[595px] bg-white border-[rgba(222,222,222,0.3)] rounded-xl shadow-xl shadow-red-100 content-between">
@@ -49,7 +52,13 @@ export const AppContent: React.FC = () => {
           <Route path="*" element={<Navigate to="/" />} />
 
           {/* TODO: route to message list of different locations and route to chat bubble */}
-
+          <Route path="/messages" element={
+          <ProtectedRoute>
+            <MessageListPlaceholder />
+          </ProtectedRoute>
+        } />
+       
+        
 {/* 
     <Route path="/messages" element={
           <ProtectedRoute>
