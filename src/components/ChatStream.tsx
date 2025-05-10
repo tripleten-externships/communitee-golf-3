@@ -1,19 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ChatBubble } from "./ChatBubble";
-import { ChatInput } from "./ChatInput";
-import { token } from "../services/constant";
-import { getSingleMsgStream, updateSingleMsgStream } from "../services/api";
+import { Message } from "./ChatInterFace";
 
-type Message = {
-  id: string;
-  senderId: string;
-  content: string;
-  sentAt: string;
-};
-
-//TODO: replace with real data
 const user = "user-123";
-const client = "1";
 
 //Only display time at a gap of at least 30 mins
 function displayTime(current: Message, prev?: Message) {
@@ -43,33 +32,16 @@ function getRelativeTime(sentAt: string) {
 }
 
 //ChatStream Compenent
-export const ChatStream: React.FC = () => {
-  const [messages, setMessages] = React.useState<Message[]>([]);
+export const ChatStream: React.FC<{ messages: Message[] }> = ({ messages }) => {
+  const newMsgRef = React.useRef<HTMLDivElement | null>(null);
 
-  React.useEffect(() => {
-    getSingleMsgStream(client, token)
-      .then((res) => {
-        setMessages(res.messages);
-      })
-      .catch(() => console.error);
-  }, []);
-
-  //handle user sending message
-  function handleSendMessage(message: string) {
-    const newMessage = {
-      id: `${Date.now()}`,
-      content: message,
-      sentAt: new Date().toISOString(),
-      senderId: "user-123",
-    };
-
-    setMessages([...messages, newMessage]);
-
-    updateSingleMsgStream(newMessage.content, client, token);
-  }
+  //Auto scroll to new messages when send or receive them
+  useEffect(() => {
+    newMsgRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   return (
-    <div className="m-1 flex flex-col gap-1 overflow-y-auto">
+    <div className="m-1 flex flex-col gap-1">
       {messages.map((msg, i) => {
         const prev = messages[i - 1];
         const isDisplayed = displayTime(msg, prev);
@@ -90,7 +62,7 @@ export const ChatStream: React.FC = () => {
           </React.Fragment>
         );
       })}
-      <ChatInput onSend={handleSendMessage} />
+      <div ref={newMsgRef}></div>
     </div>
   );
 };

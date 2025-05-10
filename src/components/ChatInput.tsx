@@ -12,12 +12,13 @@ export const ChatInput: React.FC<ChnatInputProps> = ({ onSend }) => {
     e.preventDefault();
 
     const newMessage = values.message;
+    if (!newMessage) return;
     onSend(newMessage);
 
     setValues({});
   }
   return (
-    <form className="relative w-full " onSubmit={handleSubmit}>
+    <form className="relative" onSubmit={handleSubmit}>
       <input
         type="text"
         placeholder="Write a message..."
