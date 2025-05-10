@@ -8,13 +8,13 @@ interface LoginFormProps {
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
-  const {isSubmitted,isLoading,logInError,logInErrorMessage,handleForgotPassword}=useAuth();
+  const {isSubmitted,isLoading,logInError,logInErrorMessage,handleForgotPassword,isLoggedIn}=useAuth();
   const {values, handleValueChange, errors, isValid, resetForm}=validateLoginForm();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onLogin(values.username, values.password);
-    
+    console.log(isLoggedIn, "right post form submit");
   };
 
   const onForgotPassword = () => {

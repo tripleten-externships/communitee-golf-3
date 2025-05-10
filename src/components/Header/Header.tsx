@@ -3,14 +3,10 @@ import exit from "../../assets/exit.png";
 import signout from "../../assets/sign-out.png";
 import { useAuth } from "../../hooks/useAuth";
 
-
-
 interface HeaderProps {
   handleExitClick: () => void;
   handleSignoutClick: () => void;
   isLoggedIn: boolean;
-
-
 }
 
 function Header({
@@ -18,15 +14,15 @@ function Header({
   handleSignoutClick,
   isLoggedIn,
 }: HeaderProps) {
-  const {handleLogoClick}=useAuth();
+  const { handleLogoClick } = useAuth();
   return (
     <header className="w-[336px] flex space-x-[48px] my-5 mx-5">
       <button
         className="button__signout"
         onClick={(e) => {
-            e.preventDefault();
-            handleSignoutClick();
-          }} 
+          e.preventDefault();
+          handleSignoutClick();
+        }}
         disabled={!isLoggedIn}
       >
         <img
