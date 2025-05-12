@@ -3,11 +3,13 @@
   "name": "CommuniteeGolf Chat",
   "version": "1.0.0",
   "description": "A chat extension for CommuniteeGolf",
-  "permissions": [
-    "storage"
-  ],
+  "permissions": ["storage", "notifications", "windows"],
   "action": {
     "default_popup": "index.html"
+  },
+  "background": {
+    "service_worker": "background.tsx",
+    "type": "module"
   },
   "icons": {
     "16": "icons/icon16.png",
