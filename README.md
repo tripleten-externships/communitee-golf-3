@@ -117,7 +117,7 @@ If your commit message does not conform to the correct pattern, you will receive
   type:
     feat     A new feature.
     fix      A bug fix.
-    docs     Documentation only changes.
+    docs     Documentation only changes."
     style    Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc).
     refactor A code change that neither fixes a bug nor adds a feature.
     test     Adding missing tests or correcting existing ones.
