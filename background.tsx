@@ -1,3 +1,5 @@
+import { getToken, formatBearerToken } from './src/api/token';
+
 chrome.runtime.onInstalled.addListener(() => {
   chrome.notifications.getPermissionLevel((permission: string) => {
     if (permission !== "granted") {
@@ -16,6 +18,52 @@ chrome.notifications.onClicked.addListener(() => {
   });
 });
 
+chrome.alarms.create('checkMessages', {
+    periodInMinutes: 5
+});
+
+// Add alarm listener
+chrome.alarms.onAlarm.addListener((alarm) => {
+    if (alarm.name === 'checkMessages') {
+        checkForNewMessages();
+    }
+});
+
+// Add the check messages function
+async function checkForNewMessages() {
+    try {
+        // Use the getToken function from token.ts
+        getToken((tokenData) => {
+            if (!tokenData || !tokenData.token) {
+                console.log('User not logged in, skipping message check');
+                return;
+            }
+
+            fetch('http://localhost:5173/messages', {
+                headers: {
+                    'Authorization': formatBearerToken(tokenData.token)
+                }
+            })
+            .then(response => response.json())
+            .then(messages => {
+                if (messages.hasNewMessages) {
+                    chrome.runtime.sendMessage({
+                        type: "NEW_MESSAGE",
+                        payload: {
+                            sender: "System",
+                            content: "You have new messages!"
+                        }
+                    });
+                }
+            })
+            .catch(error => console.error('Error checking messages:', error));
+        });
+    } catch (error) {
+        console.error('Error checking messages:', error);
+    }
+}
+
+// Existing message listener remains
 chrome.runtime.onMessage.addListener(
   (message: { type: string; payload: { sender: string; content: string } }) => {
     if (message.type === "NEW_MESSAGE") {
