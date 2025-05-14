@@ -24,15 +24,9 @@ const Login: React.FC<LoginProps> = () => {
       const token = await login({ username, password });
       setIsLoggedIn(true);
       onLogin(token);
-    } catch (error: any) {
-      if (error.message === "Invalid credentials.") {
-        setLogInError(true);
-        setLogInErrorMessage("Invalid credentials");
-      }
-      if (error.message === "Username and password are required.") {
-        setLogInError(true);
-        setLogInErrorMessage("Username and password are required");
-      }
+    } catch (errorData: any) {
+      setLogInError(true);
+      setLogInErrorMessage(errorData.message);
     } finally {
       setIsLoading(false);
       setIsSubmitted(false); // Reset submission state after completion (whether success or error)

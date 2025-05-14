@@ -1,40 +1,44 @@
 import { baseUrl } from "./api.ts";
 
-export const login = async ({
-  username,
-  password,
-}: {
+interface resetPasswordProps {
   username: string;
-  password: string;
-}): Promise<any> => {
+}
+
+export async function resetPassword({
+  username,
+}: resetPasswordProps): Promise<any> {
+  if (!username) {
+    return { error: "Username is required" };
+  }
+
   try {
-    const response = await fetch(`${baseUrl}/login`, {
+    const response = await fetch(`${baseUrl}/forgot-password`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username }),
     });
 
     if (response.ok) {
       const data = await response.json();
-      return data.token;
+      return data.success;
     } else {
       const errorData = await response.json();
       if (response.status === 400) {
-        throw new Error(
-          errorData.error || "Username and password are required."
-        );
+        throw new Error(errorData.error || "1Username is required.");
       }
 
       if (response.status === 401) {
         throw new Error(errorData.error || "Invalid credentials.");
       }
-
+      if (response.status === 404) {
+        throw new Error(errorData.error || "Not Found.");
+      }
       throw new Error(errorData.error || "Login failed.");
     }
   } catch (error: any) {
     console.error;
-    throw new Error(error.message || "Login failed.");
+    throw new Error(error || "Login failed.");
   }
-};
+}

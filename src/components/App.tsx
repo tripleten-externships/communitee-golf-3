@@ -6,6 +6,7 @@ import Header from "./Header/Header";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import { getToken } from "../api/token.ts";
+import { ForgotPassword } from "./ForgotPassword.tsx";
 
 export const AppContent: React.FC = () => {
   const { isLoggedIn, logout, setIsLoggedIn, setCurrentToken } = useAuth();
@@ -83,7 +84,7 @@ export const AppContent: React.FC = () => {
         <Route path="*" element={<Navigate to="/" />} />
         <Route
           path="/forget-password"
-          element={<ForgetPasswordPlaceholder />}
+          element={isLoggedIn ? <Navigate to="/" /> : <ForgotPassword />}
         ></Route>
         {/* TODO: route to message list of different locations and route to chat bubble */}
         <Route
