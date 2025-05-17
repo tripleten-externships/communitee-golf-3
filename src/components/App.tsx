@@ -36,6 +36,7 @@ export const AppContent: React.FC = () => {
     }
   }
     */
+  //TODO: replace with the Message Summary list Component
   const MessageListPlaceholder = () => {
     return (
       <>
