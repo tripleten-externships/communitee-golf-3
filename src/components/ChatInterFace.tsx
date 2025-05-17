@@ -49,7 +49,7 @@ export const ChatInterFace: React.FC = () => {
   }
 
   return (
-    <div className="h-[514px] mt-4 overflow-hidden flex flex-col relative ">
+    <div className="h-[514px] mt-4 overflow-hidden flex flex-col relative">
       <ChatHeader
         name={clientInfo.name}
         avatar={clientInfo.avatar}

@@ -6,7 +6,6 @@ import { ChatInterFace } from "./ChatInterFace";
 export const Main: React.FC = () => {
   return (
     <>
-      <h1 className="text-center">CommuniTEE</h1>
       <ChatInterFace />
     </>
   );

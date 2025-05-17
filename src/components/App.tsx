@@ -6,6 +6,7 @@ import Header from "./Header/Header";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import { getToken } from "../api/token.ts";
+import { Main } from "./Main.tsx";
 
 export const AppContent: React.FC = () => {
   const { isLoggedIn, logout, setIsLoggedIn, setCurrentToken } = useAuth();
@@ -36,7 +37,11 @@ export const AppContent: React.FC = () => {
   }
     */
   const MessageListPlaceholder = () => {
-    return <div>You are logged in and viewing the message list!</div>;
+    return (
+      <>
+        <Main />
+      </>
+    );
   };
 
   const ForgetPasswordPlaceholder = () => {
