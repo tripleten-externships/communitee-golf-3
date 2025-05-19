@@ -1,4 +1,4 @@
-import { baseUrl } from "./api.ts";
+import { baseUrl } from "./baseUrl.ts";
 
 interface resetPasswordProps {
   username: string;
