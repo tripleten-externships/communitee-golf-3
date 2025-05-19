@@ -40,10 +40,6 @@ export const AppContent: React.FC = () => {
     return <div>You are logged in and viewing the message list!</div>;
   };
 
-  const ForgetPasswordPlaceholder = () => {
-    return <div>forget password</div>;
-  };
-
   //runs only once on component mount
   useEffect(() => {
     // Get token asynchronously and check if it’s valid
@@ -51,18 +47,13 @@ export const AppContent: React.FC = () => {
       if (retrievedToken) {
         setCurrentToken(retrievedToken); // Update state with the token if valid
         setIsLoggedIn(true); // User is logged in if token exists
-        console.log("Token retrieved:", retrievedToken);
       } else {
         setIsLoggedIn(false); // No token found, user is logged out
         setCurrentToken(null); // Clear token in state
-        console.log("No valid token found.");
       }
     });
   }, []);
 
-  useEffect(() => {
-    console.log("logged in?", isLoggedIn);
-  }, [isLoggedIn]);
   return (
     <div className="w-[352px] h-[595px] p-2 ml-1 mr-1 box-border bg-white border-[rgba(222,222,222,0.3)] rounded-xl shadow-md shadow-red-100 content-between">
       <Header

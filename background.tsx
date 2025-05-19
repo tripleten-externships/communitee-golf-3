@@ -29,3 +29,24 @@ chrome.runtime.onMessage.addListener(
     }
   }
 );
+
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.type === "PASSWORD_CHANGE_REQUEST") {
+    // Show notification after form submission
+    console.log("Received message: ", message);
+    chrome.notifications.create({
+      type: "basic",
+      iconUrl: "icons/icon48.png",
+      title: "Password Change Request",
+      message: `A verification link has been sent to your email. Please check your inbox.`,
+      requireInteraction: true,
+    });
+  }
+});
+chrome.notifications.create({
+  type: "basic",
+  iconUrl: "icons/icon48.png",
+  title: "Test Notification",
+  message: "This is a test notification!",
+  requireInteraction: true,
+});

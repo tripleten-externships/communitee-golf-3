@@ -19,6 +19,13 @@ export const ForgetPasswordForm: React.FC<ForgetPasswordFormProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleSendResetLink({ username: values.username });
+    if (typeof chrome !== "undefined" && chrome.runtime) {
+      chrome.runtime.sendMessage({
+        type: "PASSWORD_CHANGE_REQUEST",
+      });
+    } else {
+      console.error("chrome.runtime is not available.");
+    }
   };
 
   useEffect(() => {
@@ -26,6 +33,7 @@ export const ForgetPasswordForm: React.FC<ForgetPasswordFormProps> = ({
       resetForm();
     }
   }, [isSubmitted]);
+
   return (
     <form onSubmit={handleSubmit} className="space-y-5   flex flex-col w-full">
       <div>

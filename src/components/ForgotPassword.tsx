@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ForgetPasswordForm } from "./ForgotPasswordForm.tsx";
 import { resetPassword } from "../api/passwordReset.ts";
 import { useAuth } from "../hooks/useAuth.ts";
@@ -11,6 +11,7 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
   const [resetPasswordError, setResetPasswordError] = useState<string | null>(
     null
   );
+
   const handleSendResetLink = async ({ username }: usernameObj) => {
     setIsLoading(true);
     setIsSubmitted(true);
@@ -29,9 +30,6 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
       setIsSubmitted(false);
     }
   };
-  useEffect(() => {
-    console.log(resetPasswordError);
-  }, [resetPasswordError]);
 
   return (
     <div className="flex items-center justify-center ">
