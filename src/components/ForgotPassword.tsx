@@ -7,7 +7,7 @@ import { usernameObj } from "./auth/type.ts";
 interface ForgotPasswordProps {}
 
 export const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
-  const { setIsSubmitted, setIsLoading, navLogin } = useAuth();
+  const { setIsSubmitted, setIsLoading } = useAuth();
   const [resetPasswordError, setResetPasswordError] = useState<string | null>(
     null
   );
@@ -17,12 +17,16 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
     setIsSubmitted(true);
     try {
       await resetPassword({ username });
-      //TODO: show popup
-      navLogin();
+      if (typeof chrome !== "undefined" && chrome.runtime) {
+        chrome.runtime.sendMessage({
+          type: "PASSWORD_CHANGE_REQUEST",
+        });
+      } else {
+        console.error("chrome.runtime is not available.");
+      }
     } catch (error: any) {
       if (error.message) {
         setResetPasswordError(error.message);
-        console.log("faa");
       }
       throw error;
     } finally {

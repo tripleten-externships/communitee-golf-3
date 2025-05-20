@@ -59,12 +59,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     navigate("/forget-password");
   };
 
-  const navLogin = () => {
-    navigate("/login");
+  const navGoBack = () => {
+    navigate(-1);
   };
   const value: AuthContextType = {
     isLoggedIn,
-    navLogin,
+    navGoBack,
     onLogin,
     logout,
     logInError,

@@ -1,7 +1,7 @@
 import React from "react";
 import { MessageSummary } from "./MessageSummary";
 
-interface Message {
+export interface MessageStream {
   id: string;
   clientName: string;
   clientImage: string;
@@ -12,32 +12,36 @@ interface Message {
 }
 
 interface MessageSummaryListProps {
-  messages: Message[];
+  messages: MessageStream[];
   locationId?: string;
 }
 
 export const MessageSummaryList: React.FC<MessageSummaryListProps> = ({
-  messages, locationId
+  messages,
+  locationId,
 }) => {
+  const filteredMessages =
+    !locationId || locationId === "All"
+      ? messages
+      : messages.filter((message) => {
+          return message.locationId === locationId;
+        });
 
-  const filteredMessages = !locationId || locationId === "All" ? messages : messages.filter((message) => {
-    return message.locationId === locationId;
-  });
-
-  const sortedMessages = [...filteredMessages].sort((a, b) => 
-    new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime()
-  );  
+  const sortedMessages = [...filteredMessages].sort(
+    (a, b) =>
+      new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime()
+  );
 
   function formatTime(dateString: string): string {
     const now = new Date();
     const date = new Date(dateString);
     const diffMs = now.getTime() - date.getTime();
-  
+
     const minutes = Math.floor(diffMs / (1000 * 60));
     const hours = Math.floor(diffMs / (1000 * 60 * 60));
     const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
     const weeks = Math.floor(days / 7);
-  
+
     if (minutes < 60) {
       return `${minutes}m`;
     } else if (hours < 24) {
@@ -49,11 +53,12 @@ export const MessageSummaryList: React.FC<MessageSummaryListProps> = ({
     } else if (days < 30) {
       return `${weeks}w`;
     } else {
-      return date.toLocaleDateString(undefined, { day: "numeric", month: "short" });
+      return date.toLocaleDateString(undefined, {
+        day: "numeric",
+        month: "short",
+      });
     }
   }
-  
-  
 
   return (
     <ul className="flex flex-col gap-[12px] p-0 m-0 max-h-full overflow-y-auto">

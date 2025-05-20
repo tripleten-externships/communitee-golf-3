@@ -22,7 +22,7 @@ export async function resetPassword({
 
     if (response.ok) {
       const data = await response.json();
-      return data.success;
+      return data.success; //data: {success: true}
     } else {
       const errorData = await response.json();
       if (response.status === 400) {

@@ -12,20 +12,14 @@ export const ForgetPasswordForm: React.FC<ForgetPasswordFormProps> = ({
   handleSendResetLink,
   resetPasswordError,
 }) => {
-  const { isSubmitted, isLoading, navLogin } = useAuth();
+  const { isSubmitted, isLoading, navGoBack } = useAuth();
   const { values, handleValueChange, errors, isValid, resetForm } =
     validateForm(["username"]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleSendResetLink({ username: values.username });
-    if (typeof chrome !== "undefined" && chrome.runtime) {
-      chrome.runtime.sendMessage({
-        type: "PASSWORD_CHANGE_REQUEST",
-      });
-    } else {
-      console.error("chrome.runtime is not available.");
-    }
+    // navGoBack();
   };
 
   useEffect(() => {
@@ -75,7 +69,7 @@ export const ForgetPasswordForm: React.FC<ForgetPasswordFormProps> = ({
       </button>
       <button
         type="button"
-        onClick={navLogin}
+        onClick={navGoBack}
         className="font-poppins font-medium text-sm leading-6 tracking-normal text-black  block text-center  p-0 hover:text-red-600 "
       >
         Go Back

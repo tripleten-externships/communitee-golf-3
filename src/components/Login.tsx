@@ -14,7 +14,6 @@ const Login: React.FC<LoginProps> = () => {
     setIsLoading,
     setLogInError,
     setLogInErrorMessage,
-    setIsLoggedIn,
   } = useAuth();
 
   const handleLogin = async (username: string, password: string) => {
@@ -22,7 +21,6 @@ const Login: React.FC<LoginProps> = () => {
     setIsSubmitted(true); // Set submitted state to true to prevent multiple submissions
     try {
       const token = await login({ username, password });
-      setIsLoggedIn(true);
       onLogin(token);
     } catch (errorData: any) {
       setLogInError(true);
