@@ -1,41 +1,64 @@
-import { useState ,useCallback} from "react";
+import { useState, useCallback, ChangeEvent } from "react";
 
+type FormFields = Record<string, string>;
 
-const initializeFields = (fields: string[]): Record<string, string> => 
-  fields.reduce((acc, fieldName) => {
-    acc[fieldName] = ''; 
-    return acc;
-  }, {} as Record<string, string>);
+interface UseFormAndValidationReturn {
+  values: FormFields;
+  setValues: React.Dispatch<React.SetStateAction<FormFields>>;
+  handleValueChange: (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
+  errors: FormFields;
+  isValid: boolean;
+  resetForm: (
+    newValues?: FormFields,
+    newErrors?: FormFields,
+    newIsValid?: boolean
+  ) => void;
+  setIsValid: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
+export const validateForm = (
+  initialFieldNames: string[] = []
+): UseFormAndValidationReturn => {
+  const initializeFields = (fields: string[]): FormFields =>
+    fields.reduce((acc, fieldName) => {
+      acc[fieldName] = "";
+      return acc;
+    }, {} as FormFields);
+  const initialFieldState = initializeFields(initialFieldNames);
 
-const initialFieldState = initializeFields(['username', 'password']);
-type ValidationResult = {
-    isValid: boolean;
-    errors: Record<string, string>;
-    values: Record<string, string>;
-    handleValueChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    resetForm:()=>void
-    
+  const [values, setValues] = useState<FormFields>(initialFieldState);
+  const [errors, setErrors] = useState<FormFields>(initialFieldState);
+  const [isValid, setIsValid] = useState<boolean>(false);
+
+  const handleValueChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setValues({ ...values, [name]: value });
+    setErrors({ ...errors, [name]: e.target.validationMessage });
+    setIsValid(e.target.closest("form")?.checkValidity() ?? false);
   };
-  
-  export const validateLoginForm = (): ValidationResult => {
-  
-    const [values, setValues] = useState(initialFieldState);
-  const [ errors, setErrors ] = useState(initialFieldState);
-    const [ isValid, setIsValid ] = useState<boolean>(false);
-
-    const handleValueChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
-      const {name, value} = e.target
-      setValues({...values, [ name]: value });
-      setErrors({...errors, [ name]: e.target.validationMessage});
-      setIsValid(e.target.closest('form')?.checkValidity() ?? false);
-
-      
-  }
-    const resetForm = useCallback(() => {
-      setValues({username:'',password:''});
-      setErrors({});
-      setIsValid(false);
-    }, [setValues, setErrors, setIsValid]);
-    return {values, handleValueChange, errors, isValid, resetForm };
+  const resetForm = useCallback(
+    (
+      newValues: FormFields = initialFieldState,
+      newErrors: FormFields = initialFieldState,
+      newIsValid: boolean = false
+    ) => {
+      setValues(newValues);
+      setErrors(newErrors);
+      setIsValid(newIsValid);
+    },
+    [setValues, setErrors, setIsValid]
+  );
+  return {
+    values,
+    handleValueChange,
+    errors,
+    isValid,
+    resetForm,
+    setValues,
+    setIsValid,
   };
+};

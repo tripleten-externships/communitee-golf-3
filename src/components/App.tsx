@@ -1,17 +1,33 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AuthProvider } from "./auth/AuthProvider";
 import { useAuth } from "../hooks/useAuth";
 import Header from "./Header/Header";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import { getToken } from "../api/token.ts";
+import { ForgotPassword } from "./ForgotPassword.tsx";
+import { MessageSummaryList } from "./MessageSummaryList.tsx";
+import { getAllMsgStream } from "../api/api.ts";
+import { MessageStream } from "./MessageSummaryList.tsx";
 
 export const AppContent: React.FC = () => {
-  const { isLoggedIn, logout, setIsLoggedIn, setCurrentToken } = useAuth();
-
+  const { isLoggedIn, logout, setIsLoggedIn, setCurrentToken, token } =
+    useAuth();
+  const [messages, setMessages] = useState<MessageStream[]>([]); // State to store messages
   const handleExitClick = () => {
     window.close();
+  };
+
+  const getAllMessages = () => {
+    if (!token?.token) {
+      throw new Error("Token is required for authentication.");
+    } else
+      return getAllMsgStream(token?.token).then((data) => {
+        setMessages(data);
+        console.log(data);
+        console.log(2);
+      });
   };
 
   //This needs to be in chat component
@@ -35,13 +51,13 @@ export const AppContent: React.FC = () => {
     }
   }
     */
-  const MessageListPlaceholder = () => {
-    return <div>You are logged in and viewing the message list!</div>;
-  };
 
-  const ForgetPasswordPlaceholder = () => {
-    return <div>forget password</div>;
-  };
+  useEffect(() => {
+    if (isLoggedIn && token) {
+      console.log(token);
+      getAllMessages();
+    }
+  }, [token, isLoggedIn]);
 
   //runs only once on component mount
   useEffect(() => {
@@ -49,19 +65,14 @@ export const AppContent: React.FC = () => {
     getToken((retrievedToken) => {
       if (retrievedToken) {
         setCurrentToken(retrievedToken); // Update state with the token if valid
-        setIsLoggedIn(true); // User is logged in if token exists
-        console.log("Token retrieved:", retrievedToken);
+        setIsLoggedIn(true);
       } else {
         setIsLoggedIn(false); // No token found, user is logged out
         setCurrentToken(null); // Clear token in state
-        console.log("No valid token found.");
       }
     });
   }, []);
 
-  useEffect(() => {
-    console.log("logged in?", isLoggedIn);
-  }, [isLoggedIn]);
   return (
     <div className="w-[352px] h-[595px] p-2 ml-1 mr-1 box-border bg-white border-[rgba(222,222,222,0.3)] rounded-xl shadow-md shadow-red-100 content-between">
       <Header
@@ -73,24 +84,28 @@ export const AppContent: React.FC = () => {
       <Routes>
         <Route
           path="/"
-          element={isLoggedIn ? <MessageListPlaceholder /> : <Login />}
+          element={
+            isLoggedIn ? <MessageSummaryList messages={messages} /> : <Login />
+          }
         />
         <Route
           path="/login"
-          element={isLoggedIn ? <MessageListPlaceholder /> : <Login />}
+          element={
+            isLoggedIn ? <MessageSummaryList messages={messages} /> : <Login />
+          }
         />
 
         <Route path="*" element={<Navigate to="/" />} />
         <Route
           path="/forget-password"
-          element={<ForgetPasswordPlaceholder />}
+          element={isLoggedIn ? <Navigate to="/" /> : <ForgotPassword />}
         ></Route>
         {/* TODO: route to message list of different locations and route to chat bubble */}
         <Route
-          path="/messages"
+          path="/message-stream"
           element={
             <ProtectedRoute>
-              <MessageListPlaceholder />
+              <MessageSummaryList messages={messages} />
             </ProtectedRoute>
           }
         />
