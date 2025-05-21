@@ -65,19 +65,15 @@ export const MessageSummaryList: React.FC<MessageSummaryListProps> = ({
   }
 
   return (
-    <div className="w-full">
-      <div className="flex items-center gap-4 mb-4 px-2">
+    <div className="w-full flex flex-col items-center ">
+      <div className="w-full flex flex-col items-center gap-4 mb-4 px-2 border-b-2 border-gray-300 pb-2">
         <div className="flex items-center gap-2">
-          <span className="text-[14px] font-poppins font-medium">All</span>
-          <span className="text-[12px] font-poppins text-gray-500">
-            ({sortedMessages.length})
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-[14px] font-poppins font-medium">Unread</span>
-          <span className="text-[12px] font-poppins text-[#FF3131]">
-            ({totalUnreadMessages})
-          </span>
+          <button 
+        onClick={() => window.location.href = '/message-stream'}
+        className="text-[16px] font-poppins font-medium hover:text-blue-500 transition-colors cursor-pointer "
+      >
+        Messages ({totalUnreadMessages})
+      </button>
         </div>
       </div>
       <ul className="flex flex-col gap-[12px] p-0 m-0 max-h-full overflow-y-auto">
