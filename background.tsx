@@ -91,10 +91,19 @@ chrome.runtime.onMessage.addListener((message) => {
     });
   }
 });
-chrome.notifications.create({
-  type: "basic",
-  iconUrl: "icons/icon48.png",
-  title: "Test Notification",
-  message: "This is a test notification!",
-  requireInteraction: true,
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.notifications.getPermissionLevel((permission: string) => {
+    if (permission !== "granted") {
+      console.log("Enable notifications");
+    } else {
+      // Test notification
+      chrome.notifications.create({
+        type: "basic",
+        iconUrl: "icons/icon48.png",
+        title: "Test Notification",
+        message: "This is a test notification!",
+        requireInteraction: true,
+      });
+    }
+  });
 });

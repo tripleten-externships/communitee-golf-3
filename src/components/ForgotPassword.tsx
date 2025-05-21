@@ -20,6 +20,9 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
       if (typeof chrome !== "undefined" && chrome.runtime) {
         chrome.runtime.sendMessage({
           type: "PASSWORD_CHANGE_REQUEST",
+          payload: {
+            email: username,
+          },
         });
       } else {
         console.error("chrome.runtime is not available.");

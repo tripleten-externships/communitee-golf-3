@@ -31,6 +31,10 @@ export const MessageSummaryList: React.FC<MessageSummaryListProps> = ({
     (a, b) =>
       new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime()
   );
+  const totalUnreadMessages = sortedMessages.reduce(
+    (sum, message) => sum + (message.unreadCount || 0),
+    0
+  );
 
   function formatTime(dateString: string): string {
     const now = new Date();
@@ -61,18 +65,34 @@ export const MessageSummaryList: React.FC<MessageSummaryListProps> = ({
   }
 
   return (
-    <ul className="flex flex-col gap-[12px] p-0 m-0 max-h-full overflow-y-auto">
-      {sortedMessages.map((message) => (
-        <li key={message.id}>
-          <MessageSummary
-            name={message.clientName}
-            message={message.lastMessage}
-            time={formatTime(message.lastMessageAt)}
-            unreadCount={message.unreadCount}
-            avatarUrl={message.clientImage}
-          />
-        </li>
-      ))}
-    </ul>
+    <div className="w-full">
+      <div className="flex items-center gap-4 mb-4 px-2">
+        <div className="flex items-center gap-2">
+          <span className="text-[14px] font-poppins font-medium">All</span>
+          <span className="text-[12px] font-poppins text-gray-500">
+            ({sortedMessages.length})
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-[14px] font-poppins font-medium">Unread</span>
+          <span className="text-[12px] font-poppins text-[#FF3131]">
+            ({totalUnreadMessages})
+          </span>
+        </div>
+      </div>
+      <ul className="flex flex-col gap-[12px] p-0 m-0 max-h-full overflow-y-auto">
+        {sortedMessages.map((message) => (
+          <li key={message.id}>
+            <MessageSummary
+              name={message.clientName}
+              message={message.lastMessage}
+              time={formatTime(message.lastMessageAt)}
+              unreadCount={message.unreadCount}
+              avatarUrl={message.clientImage}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
