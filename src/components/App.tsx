@@ -14,7 +14,7 @@ import { MessageStream } from "./MessageSummaryList.tsx";
 export const AppContent: React.FC = () => {
   const { isLoggedIn, logout, setIsLoggedIn, setCurrentToken, token } =
     useAuth();
-  const [messages, setMessages] = useState<MessageStream[]>([]); // State to store messages
+  const [messageStream, setMessageStream] = useState<MessageStream[]>([]); // State to store messages
   const handleExitClick = () => {
     window.close();
   };
@@ -24,7 +24,7 @@ export const AppContent: React.FC = () => {
       throw new Error("Token is required for authentication.");
     } else
       return getAllMsgStream(token?.token).then((data) => {
-        setMessages(data);
+        setMessageStream(data);
         console.log(data);
         console.log(2);
       });
@@ -85,13 +85,21 @@ export const AppContent: React.FC = () => {
         <Route
           path="/"
           element={
-            isLoggedIn ? <MessageSummaryList messages={messages} /> : <Login />
+            isLoggedIn ? (
+              <MessageSummaryList messages={messageStream} />
+            ) : (
+              <Login />
+            )
           }
         />
         <Route
           path="/login"
           element={
-            isLoggedIn ? <MessageSummaryList messages={messages} /> : <Login />
+            isLoggedIn ? (
+              <MessageSummaryList messages={messageStream} />
+            ) : (
+              <Login />
+            )
           }
         />
 
@@ -105,7 +113,7 @@ export const AppContent: React.FC = () => {
           path="/message-stream"
           element={
             <ProtectedRoute>
-              <MessageSummaryList messages={messages} />
+              <MessageSummaryList messages={messageStream} />
             </ProtectedRoute>
           }
         />

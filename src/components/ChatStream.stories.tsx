@@ -6,15 +6,15 @@ import { AuthProvider } from "./auth/AuthProvider";
 const meta: Meta<typeof ChatStream> = {
   title: "Components/ChatStream",
   component: ChatStream,
-  decorators: [
-    (Story) => (
-      <BrowserRouter>
-        <AuthProvider>
-          <Story />
-        </AuthProvider>
-      </BrowserRouter>
-    ),
-  ],
+  // decorators: [
+  //   (Story) => (
+  //     <BrowserRouter>
+  //       <AuthProvider>
+  //         <Story />
+  //       </AuthProvider>
+  //     </BrowserRouter>
+  //   ),
+  // ],
 };
 
 export default meta;
