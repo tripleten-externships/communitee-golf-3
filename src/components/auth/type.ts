@@ -15,8 +15,12 @@ export interface AuthContextType {
   setLogInErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   handleForgotPassword: () => void;
   handleLogoClick: () => void;
+  navGoBack: () => void;
 }
 export interface TokenData {
   token: string;
   expiresAt?: number;
+}
+export interface usernameObj {
+  username: string;
 }
