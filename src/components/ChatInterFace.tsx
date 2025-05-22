@@ -28,26 +28,13 @@ export const ChatInterFace: React.FC = () => {
   const { token } = useAuth();
   const tokenString = token?.token;
 
-  // React.useEffect(() => {
-  //   getSingleMsgStream(client, tokenString)
-  //     .then((res) => {
-  //       setMessages(res.messages);
-  //     })
-  //     .catch(() => console.error);
-  // }, []);
   React.useEffect(() => {
-    if (!tokenString) {
-      console.error("Token is missing");
-      return; // Do nothing if the token is missing
-    }
-
     getSingleMsgStream(client, tokenString)
       .then((res) => {
-        console.log("Fetched messages:", res.messages);
         setMessages(res.messages);
       })
-      .catch(() => console.error("Error fetching messages"));
-  }, [client, tokenString]);
+      .catch(() => console.error);
+  }, []);
 
   //handle user sending message
   function handleSendMessage(message: string) {
