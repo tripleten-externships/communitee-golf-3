@@ -53,14 +53,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     navigate("/login");
     setLogInError(false);
     setLogInErrorMessage("");
-    console.log("click");
   };
 
   const handleForgotPassword = () => {
     navigate("/forget-password");
   };
+
+  const navGoBack = () => {
+    navigate(-1);
+  };
   const value: AuthContextType = {
     isLoggedIn,
+    navGoBack,
     onLogin,
     logout,
     logInError,

@@ -3,8 +3,8 @@ import { ChatStream } from "./ChatStream";
 import { ChatHeader } from "./ChatHeader";
 import { ChatInput } from "./ChatInput";
 import avatar from "../assets/avatar.jpg";
-import { token } from "../services/constant";
-import { getSingleMsgStream, updateSingleMsgStream } from "../services/api";
+import { getSingleMsgStream, updateSingleMsgStream } from "../api/api";
+import { useAuth } from "../hooks/useAuth";
 
 export type Message = {
   id: string;
@@ -25,9 +25,11 @@ const clientInfo = {
 
 export const ChatInterFace: React.FC = () => {
   const [messages, setMessages] = React.useState<Message[]>([]);
+  const { token } = useAuth();
+  const tokenString = token?.token;
 
   React.useEffect(() => {
-    getSingleMsgStream(client, token)
+    getSingleMsgStream(client, tokenString)
       .then((res) => {
         setMessages(res.messages);
       })
@@ -45,7 +47,7 @@ export const ChatInterFace: React.FC = () => {
 
     setMessages([...messages, newMessage]);
 
-    updateSingleMsgStream(newMessage.content, client, token);
+    updateSingleMsgStream(newMessage.content, client, tokenString);
   }
 
   return (
