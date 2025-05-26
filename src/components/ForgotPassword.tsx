@@ -18,14 +18,18 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
     try {
       await resetPassword({ username });
       if (typeof chrome !== "undefined" && chrome.runtime) {
+        console.log("chrome.runtime is available");
         chrome.runtime.sendMessage({
           type: "PASSWORD_CHANGE_REQUEST",
           payload: {
-            email: username,
+            username,
           },
         });
       } else {
-        console.error("chrome.runtime is not available.");
+        console.log("chrome.runtime is not available, showing alert");
+        alert(
+          `A verification link has been sent to your email. Please check your inbox.`
+        );
       }
     } catch (error: any) {
       if (error.message) {

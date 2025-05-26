@@ -5,6 +5,10 @@ import manifest from "./manifest.json";
 
 export default defineConfig({
   plugins: [react(), crx({ manifest })],
+  define: {
+    // Inject EXT_MODE as an environment variable
+    "process.env.EXT_MODE": JSON.stringify(process.env.EXT_MODE || "dev"), // Default to 'dev' if not set
+  },
   build: {
     target: "esnext",
     outDir: "dist",

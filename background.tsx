@@ -1,4 +1,4 @@
-import { getToken, formatBearerToken } from './src/api/token';
+import { getToken, formatBearerToken } from "./src/api/token";
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.notifications.getPermissionLevel((permission: string) => {
@@ -18,49 +18,49 @@ chrome.notifications.onClicked.addListener(() => {
   });
 });
 
-chrome.alarms.create('checkMessages', {
-    periodInMinutes: 5
+chrome.alarms.create("checkMessages", {
+  periodInMinutes: 5,
 });
 
 // Add alarm listener
 chrome.alarms.onAlarm.addListener((alarm) => {
-    if (alarm.name === 'checkMessages') {
-        checkForNewMessages();
-    }
+  if (alarm.name === "checkMessages") {
+    checkForNewMessages();
+  }
 });
 
 // Add the check messages function
 async function checkForNewMessages() {
-    try {
-        // Use the getToken function from token.ts
-        getToken((tokenData) => {
-            if (!tokenData || !tokenData.token) {
-                console.log('User not logged in, skipping message check');
-                return;
-            }
+  try {
+    // Use the getToken function from token.ts
+    getToken((tokenData) => {
+      if (!tokenData || !tokenData.token) {
+        console.log("User not logged in, skipping message check");
+        return;
+      }
 
-            fetch('http://localhost:5173/messages', {
-                headers: {
-                    'Authorization': formatBearerToken(tokenData.token)
-                }
-            })
-            .then(response => response.json())
-            .then(messages => {
-                if (messages.hasNewMessages) {
-                    chrome.runtime.sendMessage({
-                        type: "NEW_MESSAGE",
-                        payload: {
-                            sender: "System",
-                            content: "You have new messages!"
-                        }
-                    });
-                }
-            })
-            .catch(error => console.error('Error checking messages:', error));
-        });
-    } catch (error) {
-        console.error('Error checking messages:', error);
-    }
+      fetch("http://localhost:5173/messages", {
+        headers: {
+          Authorization: formatBearerToken(tokenData.token),
+        },
+      })
+        .then((response) => response.json())
+        .then((messages) => {
+          if (messages.hasNewMessages) {
+            chrome.runtime.sendMessage({
+              type: "NEW_MESSAGE",
+              payload: {
+                sender: "System",
+                content: "You have new messages!",
+              },
+            });
+          }
+        })
+        .catch((error) => console.error("Error checking messages:", error));
+    });
+  } catch (error) {
+    console.error("Error checking messages:", error);
+  }
 }
 
 // Existing message listener remains
@@ -78,32 +78,40 @@ chrome.runtime.onMessage.addListener(
   }
 );
 
+function logError(errorMessage: any) {
+  // You can replace this with more sophisticated logging (e.g., sending to a server)
+  console.error("Error:", errorMessage);
+}
+
 chrome.runtime.onMessage.addListener((message) => {
   if (message.type === "PASSWORD_CHANGE_REQUEST") {
-    // Show notification after form submission
-    console.log("Received message: ", message);
-    chrome.notifications.create({
-      type: "basic",
-      iconUrl: "icons/icon48.png",
-      title: "Password Change Request",
-      message: `A verification link has been sent to your email. Please check your inbox.`,
-      requireInteraction: true,
-    });
-  }
-});
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.notifications.getPermissionLevel((permission: string) => {
-    if (permission !== "granted") {
-      console.log("Enable notifications");
-    } else {
-      // Test notification
-      chrome.notifications.create({
-        type: "basic",
-        iconUrl: "icons/icon48.png",
-        title: "Test Notification",
-        message: "This is a test notification!",
-        requireInteraction: true,
-      });
+    try {
+      // Log the received message
+      console.log("Received message: ", message);
+
+      // Create the notification
+      chrome.notifications.create(
+        {
+          type: "basic",
+          iconUrl: "icons/icon48.png",
+          title: "Password Change Request",
+          message: `A verification link has been sent to your email. Please check your inbox.`,
+          requireInteraction: true,
+        },
+        (notificationId) => {
+          if (chrome.runtime.lastError) {
+            // If there's an error with creating the notification, log it
+            logError(
+              `Failed to create notification: ${chrome.runtime.lastError.message}`
+            );
+          } else {
+            console.log("Notification created successfully:", notificationId);
+          }
+        }
+      );
+    } catch (error: any) {
+      // If something goes wrong during execution, log the error
+      logError(`Error in processing PASSWORD_CHANGE_REQUEST: ${error.message}`);
     }
-  });
+  }
 });

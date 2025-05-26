@@ -1,4 +1,8 @@
 const TOKEN_KEY = "jwt";
+const isProduction = process.env.EXT_MODE === "prod";
+console.log(
+  isProduction ? "Running in Production Mode" : "Running in Development Mode"
+);
 
 // Define the structure of the token data with expiration
 interface TokenData {
@@ -25,7 +29,7 @@ export const setToken = (token: string, expirationHours: number = 24): void => {
     chrome.storage.local.set({ [TOKEN_KEY]: tokenData }, () => {
       console.log("Token saved in chrome storage.");
     });
-  } else if (typeof localStorage !== "undefined") {
+  } else if (!isProduction) {
     // Use localStorage for regular browser environments during development
     localStorage.setItem(TOKEN_KEY, JSON.stringify(tokenData));
     console.log("Token saved in localStorage.");
@@ -60,7 +64,7 @@ export const getToken = (callback: (token: TokenData | null) => void): void => {
         callback(null); // Return null if there is an error
       }
     });
-  } else if (typeof localStorage !== "undefined") {
+  } else if (!isProduction) {
     // Use localStorage for regular browser environments during development
     const tokenDataString = localStorage.getItem(TOKEN_KEY);
 
@@ -92,7 +96,7 @@ export const removeToken = (): void => {
     chrome.storage.local.remove([TOKEN_KEY], () => {
       console.log("Token removed from chrome storage.");
     });
-  } else if (typeof localStorage !== "undefined") {
+  } else if (!isProduction) {
     // Use localStorage for regular browser environments during development
     localStorage.removeItem(TOKEN_KEY);
     console.log("Token removed from localStorage.");
