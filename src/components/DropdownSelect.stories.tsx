@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { DropdownSelect } from "./DropdownSelect";
 
@@ -20,25 +20,32 @@ const mockItems: Item[] = [
   { id: "1", name: "Golf Course One" },
   { id: "2", name: "Golf Course Two" },
   { id: "3", name: "Golf Course Three" },
-  { id: "4", name: "Golf Course Four" }
+  { id: "4", name: "Golf Course Four" },
 ];
 
 const Template: Story = {
   render: (args) => {
-    const [selectedItem, setSelectedItem] = useState<Item>({
-      id: args.defaultOptionValue || "all",
-      name: args.defaultOptionName || "All",
-    });
+    const Wrapper: React.FC = () => {
+      const [selectedItem, setSelectedItem] = useState<Item>({
+        id: args.defaultOptionValue || "all",
+        name: args.defaultOptionName || "All",
+      });
 
-    return (
-      <div className="p-6 bg-gray-50 min-h-screen">
-        <DropdownSelect
-          {...args}
-          items={mockItems}
-          setSelectionOut={setSelectedItem}
-        />
-      </div>
-    );
+      return (
+        <div className="p-6 bg-gray-50 min-h-screen space-y-4">
+          <DropdownSelect
+            {...args}
+            items={mockItems}
+            setSelectionOut={setSelectedItem}
+          />
+          <p className="text-gray-700 text-sm">
+            Selected: <strong>{selectedItem.name}</strong> (ID: {selectedItem.id})
+          </p>
+        </div>
+      );
+    };
+
+    return <Wrapper />;
   },
   args: {
     label: "Location",
@@ -48,3 +55,5 @@ const Template: Story = {
 };
 
 export const Default = Template;
+
+
