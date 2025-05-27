@@ -96,7 +96,6 @@ chrome.runtime.onMessage.addListener((message) => {
           iconUrl: "icons/icon48.png",
           title: "Password Change Request",
           message: `A verification link has been sent to your email. Please check your inbox.`,
-          requireInteraction: true,
         },
         (notificationId) => {
           if (chrome.runtime.lastError) {

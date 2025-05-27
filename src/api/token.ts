@@ -1,5 +1,6 @@
 const TOKEN_KEY = "jwt";
-const isProduction = process.env.EXT_MODE === "prod";
+console.log(import.meta.env.VITE_EXT_MODE);
+const isProduction = import.meta.env.VITE_EXT_MODE === "prod";
 console.log(
   isProduction ? "Running in Production Mode" : "Running in Development Mode"
 );
