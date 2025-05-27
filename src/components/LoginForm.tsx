@@ -1,56 +1,96 @@
-import React from "react";
+import React,{useEffect} from "react";
+import { validateLoginForm } from "../hooks/validateLoginForm";
+import { useAuth } from "../hooks/useAuth";
+
 
 interface LoginFormProps {
-  onLogin: () => void;
+  onLogin: (username: string, password: string) => void;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const {isSubmitted,isLoading,logInError,logInErrorMessage,handleForgotPassword,isLoggedIn}=useAuth();
+  const {values, handleValueChange, errors, isValid, resetForm}=validateLoginForm();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement actual login logic
-    onLogin();
+    onLogin(values.username, values.password);
+    console.log(isLoggedIn, "right post form submit");
   };
 
+  const onForgotPassword = () => {
+    handleForgotPassword();
+  };
+  useEffect(() => {
+    if (!isSubmitted) {
+      resetForm();
+    }
+  }, [isSubmitted]);
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
+    <form onSubmit={handleSubmit} className="space-y-5   flex flex-col w-full">
+      <div >
         <label
+      
+          className="sr-only"
           htmlFor="username"
-          className="block text-sm font-medium text-gray-700"
         >
           Username
+          
         </label>
         <input
           type="text"
           id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          name="username" 
+          placeholder="Username"
+          value={values.username}
+          onChange={handleValueChange}
+          className={`w-full rounded-xl border border-solid p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+            (errors.username || logInError)? 'border-red-500' : 'border-gray-400'
+          }`}
+          required
+         
         />
+         {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
+         {logInError && (!errors.username )&& <p className="text-red-500 text-sm">{logInErrorMessage}</p>}
+     
       </div>
       <div>
         <label
           htmlFor="password"
-          className="block text-sm font-medium text-gray-700"
+          className="sr-only"
         >
           Password
         </label>
         <input
           type="password"
           id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          name="password"
+          placeholder="Password"
+          value={values.password}
+          onChange={handleValueChange}
+          className={`w-full rounded-xl border border-solid p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+            (errors.password || logInError)? 'border-red-500' : 'border-gray-400'
+          }`}
+          required
+          
         />
+        {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+        {logInError && (!errors.password)&& <p className="text-red-500 text-sm">{logInErrorMessage}</p>}
       </div>
       <button
         type="submit"
-        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        className={`w-full py-3 px-4 border border-transparent rounded-md shadow-sm font-poppins font-semibold text-base leading-6 tracking-normal text-white bg-custom-red cursor-pointer
+          ${!isValid ? 'bg-custom-red hover:bg-gray-400 focus:ring-none' : 
+      'bg-custom-red hover:bg-red-600 focus:ring-blue-500'}`}
+     disabled={!isValid}
+     >
+      {isLoading ? "Loading..." : "Sign In"}
+      </button>
+      <button
+        type="button"
+        onClick={onForgotPassword}  
+        className="font-poppins font-medium text-sm leading-6 tracking-normal text-black  block text-center  p-0 hover:text-red-600 "
       >
-        Sign in
+        Forgot Password? 
       </button>
     </form>
   );

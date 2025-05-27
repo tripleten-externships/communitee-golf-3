@@ -83,7 +83,7 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
       {isOpen && (
         <ul
           className="
-            absolute mt-[8px] py-[4px] w-full bg-white z-999 border border-[#959494]
+            absolute mt-[8px] py-[4px] w-full bg-white z-[999] border border-[#959494]
             rounded-[12px] shadow-[0px_4px_4px_rgba(0,0,0,0.1)] overflow-auto max-h-[153px]
           "
         >
