@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { ChatStream } from "./ChatStream";
 import { ChatHeader } from "./ChatHeader";
 import { ChatInput } from "./ChatInput";
@@ -25,6 +26,7 @@ const clientInfo = {
 
 export const ChatInterFace: React.FC = () => {
   const [messages, setMessages] = React.useState<Message[]>([]);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     getSingleMsgStream(client, token)
@@ -53,7 +55,7 @@ export const ChatInterFace: React.FC = () => {
       <ChatHeader
         name={clientInfo.name}
         avatar={clientInfo.avatar}
-        onBack={() => {}}
+        onBack={() => navigate("/messages")}
       />
       <div className="flex-1 overflow-y-auto pt-5 pb-[60px]">
         <ChatStream messages={messages} />

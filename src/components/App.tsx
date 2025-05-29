@@ -6,7 +6,6 @@ import Header from "./Header/Header";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import { getToken } from "../api/token.ts";
-import { Main } from "./Main.tsx";
 
 export const AppContent: React.FC = () => {
   const { isLoggedIn, logout, setIsLoggedIn, setCurrentToken } = useAuth();
@@ -38,11 +37,7 @@ export const AppContent: React.FC = () => {
     */
   //TODO: replace with the Message Summary list Component
   const MessageListPlaceholder = () => {
-    return (
-      <>
-        <Main />
-      </>
-    );
+    return <></>;
   };
 
   const ForgetPasswordPlaceholder = () => {
