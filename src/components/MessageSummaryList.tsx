@@ -1,5 +1,6 @@
 import React from "react";
 import { MessageSummary } from "./MessageSummary";
+import { Tabber } from "./Tabber";
 
 export interface MessageStream {
   id: string;
@@ -21,6 +22,11 @@ export const MessageSummaryList: React.FC<MessageSummaryListProps> = ({
   const sortedMessages = [...messages].sort(
     (a, b) =>
       new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime()
+  );
+
+  const totalUnreadMessages = sortedMessages.reduce(
+    (sum, message) => sum + (message.unreadCount || 0),
+    0
   );
 
   function formatTime(dateString: string): string {
@@ -52,20 +58,23 @@ export const MessageSummaryList: React.FC<MessageSummaryListProps> = ({
   }
 
   return messages.length > 0 ? (
-    <ul className="flex flex-col gap-[12px] p-0 m-0 max-h-[356px] overflow-y-auto">
-      {sortedMessages.map((message) => (
-        <li key={message.id}>
-          <MessageSummary
-            id={message.id}
-            name={message.clientName}
-            message={message.lastMessage}
-            time={formatTime(message.lastMessageAt)}
-            unreadCount={message.unreadCount}
-            avatarUrl={message.clientImage}
-          />
-        </li>
-      ))}
-    </ul>
+    <div className="w-full flex flex-col items-center ">
+      <Tabber totalUnreadMessages={totalUnreadMessages} />
+      <ul className="flex flex-col gap-[12px] p-0 m-0 max-h-[356px] overflow-y-auto">
+        {sortedMessages.map((message) => (
+          <li key={message.id}>
+            <MessageSummary
+              id={message.id}
+              name={message.clientName}
+              message={message.lastMessage}
+              time={formatTime(message.lastMessageAt)}
+              unreadCount={message.unreadCount}
+              avatarUrl={message.clientImage}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
   ) : (
     <h2 className="text-center text-[16px] font-[500] leading-[1.2] font-poppins text-[#959494]">
       No Messages
