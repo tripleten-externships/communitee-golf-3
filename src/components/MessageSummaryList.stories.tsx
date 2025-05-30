@@ -1,19 +1,22 @@
 import { Meta, StoryObj } from "@storybook/react";
+import { MemoryRouter } from "react-router-dom";
 import { MessageSummaryList } from "./MessageSummaryList";
 
 const meta: Meta<typeof MessageSummaryList> = {
   title: "Components/MessageSummaryList",
   component: MessageSummaryList,
   tags: ["autodocs"],
-  argTypes: {
-    locationId: {
-      control: "select",
-      options: ["All", "loc1", "loc2", "loc3"],
-    },
-  },
+  decorators: [
+    (Story) => (
+      <MemoryRouter>
+        <Story />
+      </MemoryRouter>
+    ),
+  ],
 };
 
 export default meta;
+
 type Story = StoryObj<typeof MessageSummaryList>;
 
 const mockMessages = [
@@ -58,21 +61,12 @@ const mockMessages = [
 export const Default: Story = {
   args: {
     messages: mockMessages,
-    locationId: "All",
-  },
-};
-
-export const FilteredByLoc1: Story = {
-  args: {
-    messages: mockMessages,
-    locationId: "loc1",
   },
 };
 
 export const EmptyList: Story = {
   args: {
     messages: [],
-    locationId: "All",
   },
 };
 

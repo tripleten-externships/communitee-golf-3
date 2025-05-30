@@ -10,6 +10,8 @@ import { ForgotPassword } from "./ForgotPassword.tsx";
 import { MessageSummaryList } from "./MessageSummaryList.tsx";
 import { getAllMsgStream } from "../api/api.ts";
 import { MessageStream } from "./MessageSummaryList.tsx";
+import { MessagesPage } from "./MessagesPage.tsx";
+import { ChatInterFace } from "./ChatInterFace.tsx";
 
 export const AppContent: React.FC = () => {
   const { isLoggedIn, logout, setIsLoggedIn, setCurrentToken, token } =
@@ -113,7 +115,15 @@ export const AppContent: React.FC = () => {
           path="/message-stream"
           element={
             <ProtectedRoute>
-              <MessageSummaryList messages={messageStream} />
+              <MessagesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chat-interface"
+          element={
+            <ProtectedRoute>
+              <ChatInterFace />
             </ProtectedRoute>
           }
         />

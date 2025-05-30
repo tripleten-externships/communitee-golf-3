@@ -1,22 +1,31 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 interface MessageSummaryProps {
+  id: string
   name: string;
   message: string;
   time: string;
   unreadCount?: number;
   avatarUrl: string;
-  onClick?: () => void;
 }
 
 export const MessageSummary: React.FC<MessageSummaryProps> = ({
+  id,
   name,
   message,
   time,
   unreadCount,
   avatarUrl,
-  onClick,
 }) => {
+
+  const navigate = useNavigate();
+
+  const onClick = () => {
+  navigate("/chat-interface", { state: { selectedClient:  {id: id, name: name, avatar: avatarUrl}} });
+};
+
+
   return (
     <div
       onClick={onClick}
