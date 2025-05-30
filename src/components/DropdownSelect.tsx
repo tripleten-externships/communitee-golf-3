@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import ChevronDown from "../assets/chevron-down.svg";
 
-interface Item {
+export interface Item {
   id: string;
   name: string;
 }

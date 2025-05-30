@@ -7,7 +7,6 @@ import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import { getToken } from "../api/token.ts";
 import { ForgotPassword } from "./ForgotPassword.tsx";
-import { MessageSummaryList } from "./MessageSummaryList.tsx";
 import { getAllMsgStream } from "../api/api.ts";
 import { MessageStream } from "./MessageSummaryList.tsx";
 import { MessagesPage } from "./MessagesPage.tsx";
@@ -88,7 +87,7 @@ export const AppContent: React.FC = () => {
           path="/"
           element={
             isLoggedIn ? (
-              <MessageSummaryList messages={messageStream} />
+              <MessagesPage />
             ) : (
               <Login />
             )
@@ -98,7 +97,7 @@ export const AppContent: React.FC = () => {
           path="/login"
           element={
             isLoggedIn ? (
-              <MessageSummaryList messages={messageStream} />
+              <MessagesPage />
             ) : (
               <Login />
             )

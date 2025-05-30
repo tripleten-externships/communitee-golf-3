@@ -52,7 +52,7 @@ export const updateSingleMsgStream = (
 };
 
 export const getLocationList = (token: string | undefined = "") => {
-  return request(`${baseUrl}/location}`, {
+  return request(`${baseUrl}/location`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
