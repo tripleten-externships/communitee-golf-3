@@ -64,9 +64,7 @@ export const ChatInterFace: React.FC = () => {
       <ChatHeader
         name={clientInfo.name}
         avatar={clientInfo.avatar}
-        onBack={() => {navigate("/message-stream", {
-          state: { from: "/chat-interface" },
-        });}}
+        onBack={() => {navigate(-1)}}
       />
       <div className="flex-1 overflow-y-auto pt-5 pb-[60px]">
         <ChatStream messages={messages} />
