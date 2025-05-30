@@ -73,3 +73,16 @@ export const getMessageStreamByLocationId = (
     },
   });
 };
+
+export const updateReadMsgStream = (
+  streamId: string,
+  token: string | undefined
+) => {
+  return request(`${baseUrl}/message-stream/${streamId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  });
+};

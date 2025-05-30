@@ -1,5 +1,6 @@
 import React from "react";
 import { MessageSummary } from "./MessageSummary";
+import { Tabber } from "./Tabber";
 
 export interface MessageStream {
   id: string;
@@ -13,24 +14,16 @@ export interface MessageStream {
 
 interface MessageSummaryListProps {
   messages: MessageStream[];
-  locationId?: string;
 }
 
 export const MessageSummaryList: React.FC<MessageSummaryListProps> = ({
   messages,
-  locationId,
 }) => {
-  const filteredMessages =
-    !locationId || locationId === "All"
-      ? messages
-      : messages.filter((message) => {
-          return message.locationId === locationId;
-        });
-
-  const sortedMessages = [...filteredMessages].sort(
+  const sortedMessages = [...messages].sort(
     (a, b) =>
       new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime()
   );
+
   const totalUnreadMessages = sortedMessages.reduce(
     (sum, message) => sum + (message.unreadCount || 0),
     0
@@ -64,26 +57,14 @@ export const MessageSummaryList: React.FC<MessageSummaryListProps> = ({
     }
   }
 
-  return (
-    <div className="w-full">
-      <div className="flex items-center gap-4 mb-4 px-2">
-        <div className="flex items-center gap-2">
-          <span className="text-[14px] font-poppins font-medium">All</span>
-          <span className="text-[12px] font-poppins text-gray-500">
-            ({sortedMessages.length})
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-[14px] font-poppins font-medium">Unread</span>
-          <span className="text-[12px] font-poppins text-[#FF3131]">
-            ({totalUnreadMessages})
-          </span>
-        </div>
-      </div>
-      <ul className="flex flex-col gap-[12px] p-0 m-0 max-h-full overflow-y-auto">
+  return messages.length > 0 ? (
+    <div className="w-full flex flex-col items-center ">
+      <Tabber totalUnreadMessages={totalUnreadMessages} />
+      <ul className="flex flex-col gap-[12px] p-0 m-0 max-h-[356px] overflow-y-auto">
         {sortedMessages.map((message) => (
           <li key={message.id}>
             <MessageSummary
+              id={message.id}
               name={message.clientName}
               message={message.lastMessage}
               time={formatTime(message.lastMessageAt)}
@@ -94,5 +75,9 @@ export const MessageSummaryList: React.FC<MessageSummaryListProps> = ({
         ))}
       </ul>
     </div>
+  ) : (
+    <h2 className="text-center text-[16px] font-[500] leading-[1.2] font-poppins text-[#959494]">
+      No Messages
+    </h2>
   );
 };

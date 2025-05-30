@@ -1,5 +1,5 @@
 import { getToken, formatBearerToken } from "./src/api/token";
-import { MessageStream } from './src/components/MessageSummaryList';
+import { MessageStream } from "./src/components/MessageSummaryList";
 
 function getTokenAsync(): Promise<any> {
   return new Promise((resolve) => {
@@ -42,9 +42,12 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 async function checkForNewMessages() {
   console.log("Checking for new messages...");
   try {
-    // Get token
     const tokenData = await getTokenAsync();
 
+    if (!tokenData || !tokenData.token) {
+      console.log("User not logged in, skipping message check");
+      return;
+    }
     if (!tokenData || !tokenData.token) {
       console.log("User not logged in, skipping message check");
       return;
@@ -72,16 +75,21 @@ async function checkForNewMessages() {
 
     if (messages && messages.length > 0) {
       // Get the unread count
-      const totalUnreadMessages = messages.reduce((sum: number, message: MessageStream) => {
-        return sum + message.unreadCount;
-      }, 0);
-      
+      const totalUnreadMessages = messages.reduce(
+        (sum: number, message: MessageStream) => {
+          return sum + message.unreadCount;
+        },
+        0
+      );
+
       if (totalUnreadMessages > 0) {
         chrome.notifications.create({
           type: "basic",
           iconUrl: "icons/icon48.png",
           title: "New Messages",
-          message: `You have ${totalUnreadMessages} unread message${totalUnreadMessages === 1 ? '' : 's'}`
+          message: `You have ${totalUnreadMessages} unread message${
+            totalUnreadMessages === 1 ? "" : "s"
+          }`,
         });
       }
     }
@@ -112,17 +120,40 @@ chrome.runtime.onMessage.addListener(
   }
 );
 
+function logError(errorMessage: any) {
+  // You can replace this with more sophisticated logging (e.g., sending to a server)
+  console.error("Error:", errorMessage);
+}
+
 chrome.runtime.onMessage.addListener((message) => {
   if (message.type === "PASSWORD_CHANGE_REQUEST") {
-    // Show notification after form submission
-    console.log("Received message: ", message);
-    chrome.notifications.create({
-      type: "basic",
-      iconUrl: "icons/icon48.png",
-      title: "Password Change Request",
-      message: `A verification link has been sent to your email. Please check your inbox.`,
-      requireInteraction: true,
-    });
+    try {
+      // Log the received message
+      console.log("Received message: ", message);
+
+      // Create the notification
+      chrome.notifications.create(
+        {
+          type: "basic",
+          iconUrl: "icons/icon48.png",
+          title: "Password Change Request",
+          message: `A verification link has been sent to your email. Please check your inbox.`,
+        },
+        (notificationId) => {
+          if (chrome.runtime.lastError) {
+            // If there's an error with creating the notification, log it
+            logError(
+              `Failed to create notification: ${chrome.runtime.lastError.message}`
+            );
+          } else {
+            console.log("Notification created successfully:", notificationId);
+          }
+        }
+      );
+    } catch (error: any) {
+      // If something goes wrong during execution, log the error
+      logError(`Error in processing PASSWORD_CHANGE_REQUEST: ${error.message}`);
+    }
   }
 });
 
