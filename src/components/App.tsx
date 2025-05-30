@@ -6,6 +6,8 @@ import Header from "./Header/Header";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import { getToken } from "../api/token.ts";
+import { MessagesPage } from "./MessagesPage.tsx";
+import { ChatInterFace } from "./ChatInterFace.tsx";
 
 export const AppContent: React.FC = () => {
   const { isLoggedIn, logout, setIsLoggedIn, setCurrentToken } = useAuth();
@@ -35,9 +37,6 @@ export const AppContent: React.FC = () => {
     }
   }
     */
-  const MessageListPlaceholder = () => {
-    return <div>You are logged in and viewing the message list!</div>;
-  };
 
   const ForgetPasswordPlaceholder = () => {
     return <div>forget password</div>;
@@ -73,11 +72,11 @@ export const AppContent: React.FC = () => {
       <Routes>
         <Route
           path="/"
-          element={isLoggedIn ? <MessageListPlaceholder /> : <Login />}
+          element={isLoggedIn ? <MessagesPage /> : <Login />}
         />
         <Route
           path="/login"
-          element={isLoggedIn ? <MessageListPlaceholder /> : <Login />}
+          element={isLoggedIn ? <MessagesPage /> : <Login />}
         />
 
         <Route path="*" element={<Navigate to="/" />} />
@@ -90,7 +89,15 @@ export const AppContent: React.FC = () => {
           path="/messages"
           element={
             <ProtectedRoute>
-              <MessageListPlaceholder />
+              <MessagesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chat-interface"
+          element={
+            <ProtectedRoute>
+              <ChatInterFace />
             </ProtectedRoute>
           }
         />

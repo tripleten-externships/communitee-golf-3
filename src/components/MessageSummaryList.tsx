@@ -13,20 +13,15 @@ interface Message {
 
 interface MessageSummaryListProps {
   messages: Message[];
-  locationId?: string;
 }
 
 export const MessageSummaryList: React.FC<MessageSummaryListProps> = ({
-  messages, locationId
-}) => {
+  messages
+}) => {  
 
-  const filteredMessages = !locationId || locationId === "All" ? messages : messages.filter((message) => {
-    return message.locationId === locationId;
-  });
-
-  const sortedMessages = [...filteredMessages].sort((a, b) => 
+  const sortedMessages = [...messages].sort((a, b) => 
     new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime()
-  );  
+  );
 
   function formatTime(dateString: string): string {
     const now = new Date();
@@ -56,10 +51,12 @@ export const MessageSummaryList: React.FC<MessageSummaryListProps> = ({
   
 
   return (
-    <ul className="flex flex-col gap-[12px] p-0 m-0 max-h-full overflow-y-auto">
+    messages.length > 0 ?
+    <ul className="flex flex-col gap-[12px] p-0 m-0 max-h-[356px] overflow-y-auto">
       {sortedMessages.map((message) => (
         <li key={message.id}>
           <MessageSummary
+            id={message.id}
             name={message.clientName}
             message={message.lastMessage}
             time={formatTime(message.lastMessageAt)}
@@ -69,5 +66,6 @@ export const MessageSummaryList: React.FC<MessageSummaryListProps> = ({
         </li>
       ))}
     </ul>
+    : <h2 className="text-center text-[16px] font-[500] leading-[1.2] font-poppins text-[#959494]">No Messages</h2>
   );
 };

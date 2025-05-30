@@ -16,7 +16,7 @@ function Header({
 }: HeaderProps) {
   const { handleLogoClick } = useAuth();
   return (
-    <header className="w-[336px] flex space-x-[48px] my-5 mx-5">
+    <header className="w-[296px] flex space-x-[48px] my-5 mx-5">
       <button
         className="button__signout"
         onClick={(e) => {
