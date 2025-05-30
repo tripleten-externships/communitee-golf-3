@@ -2,8 +2,12 @@ import React from "react";
 import { ChatStream } from "./ChatStream";
 import { ChatHeader } from "./ChatHeader";
 import { ChatInput } from "./ChatInput";
-import { token } from "../services/constant";
-import { getSingleMsgStream, updateSingleMsgStream, updateReadMsgStream } from "../services/api";
+import {
+  getSingleMsgStream,
+  updateSingleMsgStream,
+  updateReadMsgStream,
+} from "../api/api";
+import { useAuth } from "../hooks/useAuth";
 import { useLocation } from "react-router-dom";
 
 export type Message = {
@@ -15,26 +19,27 @@ export type Message = {
 
 export const ChatInterFace: React.FC = () => {
   const [messages, setMessages] = React.useState<Message[]>([]);
+  const { token } = useAuth();
+  const tokenString = token?.token;
 
-//TODO: replace with real API
+  //TODO: replace with real API
   const user = "user-123";
 
   const location = useLocation();
   const clientInfo = location.state?.selectedClient;
   const client = clientInfo.id;
 
-  const markAsRead = (id: string, token: string) => {
-          updateReadMsgStream(id, token)
-          .catch((err: any) => {
-         console.log(err.message);
-        });
-      };
+  const markAsRead = (id: string, token: string | undefined) => {
+    updateReadMsgStream(id, token).catch((err: any) => {
+      console.log(err.message);
+    });
+  };
 
   React.useEffect(() => {
-    getSingleMsgStream(client, token)
+    getSingleMsgStream(client, tokenString)
       .then((res) => {
         setMessages(res.messages);
-        markAsRead(client, token);
+        markAsRead(client, tokenString);
       })
       .catch(() => console.error);
   }, []);
@@ -50,7 +55,7 @@ export const ChatInterFace: React.FC = () => {
 
     setMessages([...messages, newMessage]);
 
-    updateSingleMsgStream(newMessage.content, client, token);
+    updateSingleMsgStream(newMessage.content, client, tokenString);
   }
 
   return (
