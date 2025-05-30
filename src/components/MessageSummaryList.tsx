@@ -14,24 +14,16 @@ export interface MessageStream {
 
 interface MessageSummaryListProps {
   messages: MessageStream[];
-  locationId?: string;
 }
 
 export const MessageSummaryList: React.FC<MessageSummaryListProps> = ({
   messages,
-  locationId,
 }) => {
-  const filteredMessages =
-    !locationId || locationId === "All"
-      ? messages
-      : messages.filter((message) => {
-          return message.locationId === locationId;
-        });
-
-  const sortedMessages = [...filteredMessages].sort(
+  const sortedMessages = [...messages].sort(
     (a, b) =>
       new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime()
   );
+
   const totalUnreadMessages = sortedMessages.reduce(
     (sum, message) => sum + (message.unreadCount || 0),
     0
@@ -65,13 +57,14 @@ export const MessageSummaryList: React.FC<MessageSummaryListProps> = ({
     }
   }
 
-  return (
+  return messages.length > 0 ? (
     <div className="w-full flex flex-col items-center ">
       <Tabber totalUnreadMessages={totalUnreadMessages} />
-      <ul className="flex flex-col gap-[12px] p-0 m-0 max-h-full overflow-y-auto">
+      <ul className="flex flex-col gap-[12px] p-0 m-0 max-h-[356px] overflow-y-auto">
         {sortedMessages.map((message) => (
           <li key={message.id}>
             <MessageSummary
+              id={message.id}
               name={message.clientName}
               message={message.lastMessage}
               time={formatTime(message.lastMessageAt)}
@@ -82,5 +75,9 @@ export const MessageSummaryList: React.FC<MessageSummaryListProps> = ({
         ))}
       </ul>
     </div>
+  ) : (
+    <h2 className="text-center text-[16px] font-[500] leading-[1.2] font-poppins text-[#959494]">
+      No Messages
+    </h2>
   );
 };

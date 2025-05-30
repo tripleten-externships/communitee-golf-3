@@ -2,9 +2,13 @@ import React from "react";
 import { ChatStream } from "./ChatStream";
 import { ChatHeader } from "./ChatHeader";
 import { ChatInput } from "./ChatInput";
-import avatar from "../assets/avatar.jpg";
-import { getSingleMsgStream, updateSingleMsgStream } from "../api/api";
+import {
+  getSingleMsgStream,
+  updateSingleMsgStream,
+  updateReadMsgStream,
+} from "../api/api";
 import { useAuth } from "../hooks/useAuth";
+import { useLocation } from "react-router-dom";
 
 export type Message = {
   id: string;
@@ -13,25 +17,29 @@ export type Message = {
   sentAt: string;
 };
 
-//TODO: replace with real API
-const user = "user-123";
-const client = "1";
-
-//TODO: replace avatar and client name with real component
-const clientInfo = {
-  name: "Mary Jane",
-  avatar: avatar,
-};
-
 export const ChatInterFace: React.FC = () => {
   const [messages, setMessages] = React.useState<Message[]>([]);
   const { token } = useAuth();
   const tokenString = token?.token;
 
+  //TODO: replace with real API
+  const user = "user-123";
+
+  const location = useLocation();
+  const clientInfo = location.state?.selectedClient;
+  const client = clientInfo.id;
+
+  const markAsRead = (id: string, token: string | undefined) => {
+    updateReadMsgStream(id, token).catch((err: any) => {
+      console.log(err.message);
+    });
+  };
+
   React.useEffect(() => {
     getSingleMsgStream(client, tokenString)
       .then((res) => {
         setMessages(res.messages);
+        markAsRead(client, tokenString);
       })
       .catch(() => console.error);
   }, []);
