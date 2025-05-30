@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { AuthProvider } from "./auth/AuthProvider";
 import { useAuth } from "../hooks/useAuth";
 import Header from "./Header/Header";
@@ -11,7 +11,7 @@ import { MessagesPage } from "./MessagesPage.tsx";
 import { ChatInterFace } from "./ChatInterFace.tsx";
 
 export const AppContent: React.FC = () => {
-  const { isLoggedIn, logout, setIsLoggedIn, setCurrentToken, token } =
+  const { isLoggedIn, logout, setIsLoggedIn, setCurrentToken } =
     useAuth();
   const handleExitClick = () => {
     window.close();
