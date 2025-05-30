@@ -7,28 +7,14 @@ import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import { getToken } from "../api/token.ts";
 import { ForgotPassword } from "./ForgotPassword.tsx";
-import { getAllMsgStream } from "../api/api.ts";
-import { MessageStream } from "./MessageSummaryList.tsx";
 import { MessagesPage } from "./MessagesPage.tsx";
 import { ChatInterFace } from "./ChatInterFace.tsx";
 
 export const AppContent: React.FC = () => {
   const { isLoggedIn, logout, setIsLoggedIn, setCurrentToken, token } =
     useAuth();
-  const [messageStream, setMessageStream] = useState<MessageStream[]>([]); // State to store messages
   const handleExitClick = () => {
     window.close();
-  };
-
-  const getAllMessages = () => {
-    if (!token?.token) {
-      throw new Error("Token is required for authentication.");
-    } else
-      return getAllMsgStream(token?.token).then((data) => {
-        setMessageStream(data);
-        console.log(data);
-        console.log(2);
-      });
   };
 
   //This needs to be in chat component
@@ -52,13 +38,6 @@ export const AppContent: React.FC = () => {
     }
   }
     */
-
-  useEffect(() => {
-    if (isLoggedIn && token) {
-      console.log(token);
-      getAllMessages();
-    }
-  }, [token, isLoggedIn]);
 
   //runs only once on component mount
   useEffect(() => {
