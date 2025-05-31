@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { AuthProvider } from "./auth/AuthProvider";
 import { useAuth } from "../hooks/useAuth";
 import Header from "./Header/Header";
@@ -7,29 +7,14 @@ import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import { getToken } from "../api/token.ts";
 import { ForgotPassword } from "./ForgotPassword.tsx";
-import { MessageSummaryList } from "./MessageSummaryList.tsx";
-import { getAllMsgStream } from "../api/api.ts";
-import { MessageStream } from "./MessageSummaryList.tsx";
 import { MessagesPage } from "./MessagesPage.tsx";
 import { ChatInterFace } from "./ChatInterFace.tsx";
 
 export const AppContent: React.FC = () => {
-  const { isLoggedIn, logout, setIsLoggedIn, setCurrentToken, token } =
+  const { isLoggedIn, logout, setIsLoggedIn, setCurrentToken } =
     useAuth();
-  const [messageStream, setMessageStream] = useState<MessageStream[]>([]); // State to store messages
   const handleExitClick = () => {
     window.close();
-  };
-
-  const getAllMessages = () => {
-    if (!token?.token) {
-      throw new Error("Token is required for authentication.");
-    } else
-      return getAllMsgStream(token?.token).then((data) => {
-        setMessageStream(data);
-        console.log(data);
-        console.log(2);
-      });
   };
 
   //This needs to be in chat component
@@ -53,13 +38,6 @@ export const AppContent: React.FC = () => {
     }
   }
     */
-
-  useEffect(() => {
-    if (isLoggedIn && token) {
-      console.log(token);
-      getAllMessages();
-    }
-  }, [token, isLoggedIn]);
 
   //runs only once on component mount
   useEffect(() => {
@@ -88,7 +66,7 @@ export const AppContent: React.FC = () => {
           path="/"
           element={
             isLoggedIn ? (
-              <MessageSummaryList messages={messageStream} />
+              <MessagesPage />
             ) : (
               <Login />
             )
@@ -98,7 +76,7 @@ export const AppContent: React.FC = () => {
           path="/login"
           element={
             isLoggedIn ? (
-              <MessageSummaryList messages={messageStream} />
+              <MessagesPage />
             ) : (
               <Login />
             )

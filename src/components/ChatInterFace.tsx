@@ -8,7 +8,7 @@ import {
   updateReadMsgStream,
 } from "../api/api";
 import { useAuth } from "../hooks/useAuth";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export type Message = {
   id: string;
@@ -28,6 +28,7 @@ export const ChatInterFace: React.FC = () => {
   const location = useLocation();
   const clientInfo = location.state?.selectedClient;
   const client = clientInfo.id;
+  const navigate = useNavigate();
 
   const markAsRead = (id: string, token: string | undefined) => {
     updateReadMsgStream(id, token).catch((err: any) => {
@@ -63,7 +64,7 @@ export const ChatInterFace: React.FC = () => {
       <ChatHeader
         name={clientInfo.name}
         avatar={clientInfo.avatar}
-        onBack={() => {}}
+        onBack={() => {navigate(-1)}}
       />
       <div className="flex-1 overflow-y-auto pt-5 pb-[60px]">
         <ChatStream messages={messages} />
