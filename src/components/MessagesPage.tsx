@@ -71,6 +71,7 @@ export const MessagesPage: React.FC = () => {
       label="Location"
       defaultOptionName="All Locations"
       setSelectionOut={setLocation}/>
+
    <Tabber tabs={tabsArray} defaultTabIndex={1} error={error} fontSize="16px"/>
    </div>
   )

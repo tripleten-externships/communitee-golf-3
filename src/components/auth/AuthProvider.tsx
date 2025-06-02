@@ -47,6 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     removeToken();
     setIsLoggedIn(false);
     setLogInError(false); // Reset error on logout
+    sessionStorage.removeItem("selectedLocation");
   };
 
   const handleLogoClick = () => {
