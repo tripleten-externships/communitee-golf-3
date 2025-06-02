@@ -22,16 +22,25 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
   setSelectionOut,
 }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<Item>({
+  const defaultSelection = {
     id: defaultOptionValue,
     name: defaultOptionName,
-  });
-
+  };
+  const savedSelectionString = sessionStorage.getItem(`selected${label}`);
+  const savedSlection = savedSelectionString ? JSON.parse(savedSelectionString) : defaultSelection;
   const fullItemList: Item[] = [
     { id: defaultOptionValue, name: defaultOptionName },
     ...items,
   ];
+
+  // States
+  const [selectedItem, setSelectedItem] = useState<Item>(savedSlection);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const setSeclection = (item: Item) => {
+    setSelectedItem(item);
+    setSelectionOut(item);
+  };
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -44,9 +53,15 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (savedSelectionString) {
+    setSeclection(savedSlection);
+    }
+  }, []);
+
   const handleSelect = (item: Item) => {
-    setSelectedItem(item);
-    setSelectionOut(item);
+    sessionStorage.setItem(`selected${label}`, JSON.stringify(item));
+    setSeclection(item);
     setIsOpen(false);
   };
 

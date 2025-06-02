@@ -17,28 +17,6 @@ export const AppContent: React.FC = () => {
     window.close();
   };
 
-  //This needs to be in chat component
-  /*
-  interface ChatMessage {
-    sender: string;
-    content: string | number;  // This allows both strings and numbers
-}
-
-  const handleNewMessage = (message: ChatMessage) => {
-    //When a new message arrives and popup is closed
-    if (document.hidden) {
-      //Send message to background script
-      chrome.runtime.sendMessage({
-        type: 'NEW_MESSAGE',
-        payload: {
-          sender: message.sender,
-          content: message.content
-        }
-      });
-    }
-  }
-    */
-
   //runs only once on component mount
   useEffect(() => {
     // Get token asynchronously and check if it’s valid
@@ -88,7 +66,6 @@ export const AppContent: React.FC = () => {
           path="/forget-password"
           element={isLoggedIn ? <Navigate to="/" /> : <ForgotPassword />}
         ></Route>
-        {/* TODO: route to message list of different locations and route to chat bubble */}
         <Route
           path="/message-stream"
           element={
@@ -105,21 +82,6 @@ export const AppContent: React.FC = () => {
             </ProtectedRoute>
           }
         />
-
-        {/* 
-    <Route path="/messages" element={
-          <ProtectedRoute>
-            <MessageList />  
-          </ProtectedRoute>
-        } />
-       
-        <Route path="/messages/:locationId" element={
-          <ProtectedRoute>
-            <MessageListByLocation />  
-          </ProtectedRoute>
-        } />
-    
-        <Route path="/" element={<ChatBubble />} /> */}
       </Routes>
     </div>
   );
