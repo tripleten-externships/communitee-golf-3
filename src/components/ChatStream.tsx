@@ -4,9 +4,10 @@ import { Message } from "./ChatInterFace";
 
 const user = "user-123";
 
-//Only display time at a gap of at least 30 mins
+//Only display time at a gap of at least 30 mins or adjacent messages are from different sender id
 function displayTime(current: Message, prev?: Message) {
   if (!prev) return true;
+  if (current.senderId !== prev.senderId) return true;
   const defaultGap = 30 * 60 * 1000;
 
   const timeGap =
