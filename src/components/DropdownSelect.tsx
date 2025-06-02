@@ -22,21 +22,20 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
   setSelectionOut,
 }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const saved = sessionStorage.getItem(`selected${label}`);
-  const savedSlection = saved ? JSON.parse(saved) : {
+  const defaultSelection = {
     id: defaultOptionValue,
     name: defaultOptionName,
   };
-  const [selectedItem, setSelectedItem] = useState<Item>({
-    id: defaultOptionValue,
-    name: defaultOptionName,
-  });
-
+  const savedSelectionString = sessionStorage.getItem(`selected${label}`);
+  const savedSlection = savedSelectionString ? JSON.parse(savedSelectionString) : defaultSelection;
   const fullItemList: Item[] = [
     { id: defaultOptionValue, name: defaultOptionName },
     ...items,
   ];
+
+  // States
+  const [selectedItem, setSelectedItem] = useState<Item>(savedSlection);
+  const [isOpen, setIsOpen] = useState(false);
 
   const setSeclection = (item: Item) => {
     setSelectedItem(item);
@@ -55,7 +54,7 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
   }, []);
 
   useEffect(() => {
-    if (saved) {
+    if (savedSelectionString) {
     setSeclection(savedSlection);
     }
   }, []);
